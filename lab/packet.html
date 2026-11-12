@@ -13,7 +13,6 @@
 		--grey-950: #040404; --grey-900: #0a0a09; --grey-850: #0e0e0c; --grey-800: #141411; --grey-750: #1d1e1a; --grey-700: #2a2b26;
 		--grey-650: #3e3f38; --grey-600: #54554d; --grey-500: #7f8076; --grey-400: #aaaba0; --grey-300: #d4d4c9; --grey-200: #ebebe2; --grey-100: #f5f5ef;
 		--red-400: #ed3467; --orange-400: #f1901d; --yellow-400: #f7dd4b; --green-400: #a5e22c; --blue-400: #38bce6; --purple-400: #9f7af2;
-		--font-mono: 'Iosevka Felix', ui-monospace, 'SF Mono', monospace;
 		--font-text: 'InterVariable', 'Inter', system-ui, -apple-system, sans-serif;
 
 		--ground: var(--grey-900); --pane: var(--grey-850); --raised: var(--grey-800); --edge: var(--grey-700); --line: var(--grey-650);
@@ -25,9 +24,9 @@
 	* { box-sizing: border-box; }
 	body { margin: 0; background: var(--ground); color: var(--text); font: 400 15px/var(--row) var(--font-text); }
 	main { max-width: 1040px; margin: 0 auto; padding: var(--row) 20px calc(var(--row) * 3); }
-	h1 { font: 600 24px/calc(var(--row) * 1.5) var(--font-mono); color: var(--tone); margin: 0; }
-	h2 { font: 600 17px/var(--row) var(--font-mono); color: var(--strong); margin: calc(var(--row) * 1.5) 0 calc(var(--row) / 2); padding-top: calc(var(--row) / 2); border-top: 1px solid var(--tone); }
-	h3 { font: 600 12px/var(--row) var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--tone); margin: var(--row) 0 0; }
+	h1 { font: 600 24px/calc(var(--row) * 1.5) var(--font-text); color: var(--tone); margin: 0; }
+	h2 { font: 600 17px/var(--row) var(--font-text); color: var(--strong); margin: calc(var(--row) * 1.5) 0 calc(var(--row) / 2); padding-top: calc(var(--row) / 2); border-top: 1px solid var(--tone); }
+	h3 { font: 600 12px/var(--row) var(--font-text); letter-spacing: 0.1em; text-transform: uppercase; color: var(--tone); margin: var(--row) 0 0; }
 	h3 .sub { text-transform: none; letter-spacing: 0; font-weight: 400; }
 	p { margin: calc(var(--row) / 4) 0; }
 	strong { color: var(--strong); font-weight: 600; }
@@ -36,7 +35,7 @@
 	.ok { border-left-color: var(--ok); }
 	table { border-collapse: collapse; width: 100%; margin: calc(var(--row) / 3) 0; font-size: 14px; }
 	th, td { border: 1px solid var(--edge); padding: 5px 8px; text-align: left; vertical-align: top; }
-	th { background: var(--raised); color: var(--said); font: 600 12px/var(--row) var(--font-mono); letter-spacing: 0.06em; }
+	th { background: var(--raised); color: var(--said); font: 600 12px/var(--row) var(--font-text); letter-spacing: 0.06em; }
 	td.blank { min-width: 150px; height: 30px; }
 	ul.check { list-style: none; padding: 0; margin: 4px 0; }
 	ul.check li { padding: 3px 0 3px 26px; position: relative; }
@@ -48,7 +47,7 @@
 
 	svg { width: 100%; height: auto; display: block; background: var(--pane); border: 1px solid var(--edge); border-radius: var(--radius); }
 	svg text { font: 12px var(--font-text); fill: var(--text); }
-	svg .t { font: 600 13px var(--font-mono); fill: var(--strong); }
+	svg .t { font: 600 13px var(--font-text); fill: var(--strong); }
 	svg .s { fill: var(--quiet); font-size: 11px; }
 	svg .box { fill: var(--raised); stroke: var(--line); stroke-width: 1.2; }
 	svg .open { fill: color-mix(in oklab, var(--c-open) 7%, var(--pane)); stroke: var(--c-open); stroke-width: 1.2; stroke-dasharray: 5 4; }
@@ -80,10 +79,6 @@
 
 <h1>roach-cnc — survey packet 1</h1>
 <p class="sub">AXYZ 4012 → LinuxCNC over EtherCAT · written 2026-11-12 for the weekend of Nov 14–15 · for Felix and Tyler at the machine, Nathan at the desk</p>
-
-<div class="warn">
-	<strong>Stop unplugging.</strong> AXYZ published nothing, so the machine's own wiring is the only manual there is. Every wire pulled before it is photographed and labeled is a page torn out. If gutting has started: stop where it is, and survey what is still connected first.
-</div>
 
 <h2>1 · Where we are going</h2>
 <p>The target system as the telling draws it. Dashed yellow boxes are open choices the survey settles.</p>
@@ -165,32 +160,32 @@
 <h2>2 · What the manuals already say</h2>
 
 <div class="warn">
-	<strong>The VFD's voltage is settled; its size is not.</strong> Ruled 2026-11-12: the spindle is re-strapped to delta and everything runs on single-phase 220 V. In delta the spindle wants 27.4 A continuous, 31.2 A at peak duty. A three-phase drive fed single-phase gives about half its rating, so the 11 kW, 50 A VEVOR is roughly a 25 A, 5.5 kW drive here — under the motor. <strong>One number decides the order: the breaker that will feed the machine (sheet B).</strong>
+	<strong>The VFD: the output side is fine, the input side is the question.</strong> In delta the spindle's full-load current is 27.4 A continuous, 31.2 A at peak duty — a 50 A drive covers that with room. But on single-phase the drive pulls all of that power through two input legs instead of three: about 45–55 A continuous, 55–70 A at peak. An 11 kW drive's front end is built for about 40–50 A a leg, and its capacitors for three-phase ripple. <strong>Full power needs one size up, and a 70–80 A feed (sheet B).</strong>
 </div>
-
 <table>
-	<tr><th>If the feed is…</th><th>Then</th><th>Spindle gets</th></tr>
-	<tr><td>about 50 A</td><td>The 11 kW VEVOR matches the supply. Set its current limit and accept the cap.</td><td>about 5.5 kW — plenty for most wood, short of the plate</td></tr>
-	<tr><td>70–80 A</td><td>One size up: a 15 kW-class 220 V drive, or one rated in writing for single-phase input at 32 A out.</td><td>the full 6.6 kW continuous, 8 kW peak</td></tr>
+	<tr><th>Drive</th><th>Feed</th><th>Spindle gets</th></tr>
+	<tr><td>11 kW, 50 A VEVOR</td><td>about 50 A</td><td>somewhere from 5.5 to 6.5 kW before it trips or sags — under the plate, no margin</td></tr>
+	<tr><td>15 kW class, or one rated in writing for single-phase input at 32 A out</td><td>70–80 A</td><td>the full 6.6 kW continuous, 8 kW peak</td></tr>
 </table>
-<p class="src">The halving is a rule of thumb that buyer reports of this VEVOR family agree with; the input currents are my estimates. Nathan's to check.</p>
+<p class="src">Input currents are my estimates from the manual's numbers; the drive figures are typical for the class, not this unit's data sheet. Nathan's to check.</p>
 
-<p>The only 2-pole, 8 kW motor in the HSD manual is the ES919 card <strong>H1423H0224</strong> — almost certainly what "2P 8.00 kW H1…" on the plate is. Its two connections:</p>
+<p>The only 2-pole, 8 kW motor in the HSD manual is the ES919 card <strong>H1423H0224</strong> — almost certainly what "2P 8.00 kW H1…" on the plate is; the nameplate photo confirms it. Its two connections:</p>
 <table>
 	<tr><th></th><th>Star — how it ran on the old drive</th><th>Delta — the plan</th></tr>
 	<tr><td>Voltage</td><td>380 V</td><td>220 V</td></tr>
 	<tr><td>Full voltage reached at</td><td colspan="2">200 Hz = 12,000 rpm; constant power from there to 400 Hz = 24,000 rpm</td></tr>
 	<tr><td>Power, continuous / S6 60%</td><td colspan="2">6.6 kW / 8 kW</td></tr>
-	<tr><td>Current, continuous / S6 60%</td><td>15.8 A / 18 A</td><td><strong>27.4 A / 31.2 A</strong></td></tr>
+	<tr><td>Full-load current, continuous / S6 60%</td><td>15.8 A / 18 A</td><td><strong>27.4 A / 31.2 A</strong></td></tr>
 </table>
 <ul>
 	<li><strong>The old Commander SE33400750</strong> is a 380–480 V three-phase, 7.5 kW, 16.5 A drive — a match for the star column. So the machine lived on three-phase 380–480 V.</li>
 	<li><strong>It is in star today</strong> unless someone has moved the links: the re-strap is on p.84 of the manual. Photo the board before and after.</li>
-	<li><strong>Delta at full power on single-phase</strong> → 31 A out, something like 60–70 A in (my estimate). No manual for the exact VEVOR unit turned up in one search — worth getting before it is wired: it must reach 400 Hz, and it should take a braking resistor.</li>
+	<li><strong>Locked-rotor current</strong> is not listed; from the manual's equivalent circuit it works out near 140 A per leg at 220 V, 200 Hz (p.34). On a VFD it never flows: the drive ramps the frequency and holds current to its own limit.</li>
+	<li><strong>No manual for the exact VEVOR unit</strong> turned up in one search — worth getting before it is wired: it must reach 400 Hz, and it should take a braking resistor.</li>
 	<li><strong>VFD settings, from the card</strong> — motor voltage 220 V · rated frequency 200 Hz · maximum 400 Hz · motor current 27.4 A.</li>
 	<li><strong>The spindle's other needs</strong> — fan on 230 V AC whenever powered, even idle · sensors are PNP, normally open, 10–30 V · thermal switch normally closed, must stop the spindle · never spin unless S1 says "tool locked" · never release the tool while turning.</li>
 </ul>
-<p class="src">Sources: refs/HSD Spindle Manual p.33 (card), p.80–81 (connectors), p.84 (terminal board), p.87–89 (inverter, fan), p.113–115 (sensors) · Commander SE ratings table and VEVOR buyer reports via web search, listed in the README's findings.</p>
+<p class="src">Sources: refs/HSD Spindle Manual p.33–35 (card, equivalent circuits), p.80–81 (connectors), p.84 (terminal board), p.87–89 (inverter, fan), p.113–115 (sensors) · Commander SE ratings table and VEVOR buyer reports via web search, listed in the README's findings.</p>
 
 <div class="ok">
 	<strong>The drives check out on paper.</strong> CS3E is a <em>drive</em>, not a motor — each needs a stepper. Ruled likely 2026-11-12, on Nathan's recommendation: new NEMA 34 Leadshine closed-loop motors, matched to the drives. NEMA 34 motors pair with the <strong>CS3E-D1008</strong> (30–100 V DC, 8 A), not the D507 (20–50 V DC, 7 A). LinuxCNC has a Leadshine driver that lists the D1008; one forum user homed a NEMA 34 with it. Only the dual-axis 2CS3E-D507 is marked tested, which is why one drive gets proven on the bench before four get a cabinet.
@@ -203,7 +198,6 @@
 <div>
 	<h3>A · The state of things</h3>
 	<ul class="check">
-		<li>What has already been unplugged or removed? <span class="fill"></span></li>
 		<li>Does the machine still power up? yes / no / unknown</li>
 		<li>Wide photos: whole machine, each side, the cabinet door open, the gantry, the spindle carriage</li>
 		<li>Any AXYZ serial plate on the frame — photo</li>
@@ -300,7 +294,7 @@
 <h2 class="sheet">4 · The weekends — a draft until the survey lands</h2>
 <table>
 	<tr><th>Weekend</th><th>At the machine</th><th>Between weekends — sessions and Nathan</th></tr>
-	<tr><td>1 · Nov 14–15</td><td><strong>Survey.</strong> This sheet, photos. Nothing more unplugged.</td><td>Survey read into the repo. Motor model, supply, VFD size and I/O drafted for Nathan.</td></tr>
+	<tr><td>1 · Nov 14–15</td><td><strong>Survey.</strong> This sheet, and the photos not already taken.</td><td>Survey read into the repo. Motor model, supply, VFD size and I/O drafted for Nathan.</td></tr>
 	<tr><td>2 · Nov 21–22</td><td>PC: install LinuxCNC, run the latency test. Fill survey gaps. Label and strip the cabinet.</td><td>Bench-kit order blessed by Nathan: one drive, one motor, one supply. One-axis config written.</td></tr>
 	<tr><td>3 · Dec 5–6</td><td><strong>One-axis rig</strong> on the bench: jog and home a motor from LinuxCNC.</td><td>Schematic and cabinet layout drafted from Nathan's diagram. Full order placed once the rig moves.</td></tr>
 	<tr><td>4–5 · Dec 12–20</td><td>Cabinet: backplate, power, E-stop chain, drives, wiring.</td><td>Four-axis config. Wire list checked against the build photos.</td></tr>
@@ -314,7 +308,7 @@
 <p><strong>Ruled 2026-11-12:</strong> spindle in delta, everything on single-phase 220 V · the PC is one of Tyler's · motors are new NEMA 34 Leadshine closed-loop, likely, on Nathan's word.</p>
 <p><strong>Still open:</strong></p>
 <ol>
-	<li><strong>The VFD's size</strong> — Nathan's call once the breaker is known: the 11 kW VEVOR capped near 5.5 kW, or one size up for the full plate. <em>Recommended: one size up if the feed allows 70 A; otherwise the VEVOR, with its manual in hand first.</em></li>
+	<li><strong>The VFD's size</strong> — Nathan's call: the 11 kW VEVOR, short of full power on single-phase, or one size up. <em>Recommended: one size up on a 70–80 A feed — full power is the requirement.</em></li>
 	<li><strong>The repo</strong>: private on GitHub, Felix the one writer; Tyler and Nathan read it there and send photos and notes to Felix. <em>Recommended: yes — the manuals in it are not ours to publish.</em></li>
 </ol>
 <p class="sub">Behind the gate, each built on its recommendation meanwhile: v1 scope (manual tool release; automatic tool change later) · which CS-M motor, and the D1008 to match · where the extra I/O lives · what Nathan draws in. All in the README's forks table.</p>
