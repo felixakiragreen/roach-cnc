@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>roach-cnc — survey packet 1</title>
+<style>
+	:root { --ink: #1c1b22; --dim: #5e5b6b; --line: #cfcbdb; --paper: #fbfaf7; --accent: #6b3fa0; --warn: #b3261e; --warn-bg: #fdecea; --ok-bg: #eef6ee; --ecat: #1f6fb2; --mains: #b3261e; --sig: #2e7d32; --air: #00838f; }
+	* { box-sizing: border-box; }
+	body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.45 -apple-system, "Helvetica Neue", Arial, sans-serif; }
+	main { max-width: 1040px; margin: 0 auto; padding: 24px 20px 60px; }
+	h1 { font-size: 26px; margin: 0 0 4px; }
+	h2 { font-size: 19px; margin: 34px 0 8px; padding-top: 10px; border-top: 2px solid var(--accent); }
+	h3 { font-size: 15px; margin: 18px 0 6px; color: var(--accent); }
+	p { margin: 6px 0; }
+	.sub { color: var(--dim); }
+	.warn { background: var(--warn-bg); border-left: 4px solid var(--warn); padding: 10px 14px; margin: 12px 0; }
+	.ok { background: var(--ok-bg); border-left: 4px solid var(--sig); padding: 10px 14px; margin: 12px 0; }
+	table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 14px; }
+	th, td { border: 1px solid var(--line); padding: 5px 8px; text-align: left; vertical-align: top; }
+	th { background: #f0edf6; }
+	td.blank { min-width: 150px; height: 30px; }
+	ul.check { list-style: none; padding: 0; margin: 4px 0; }
+	ul.check li { padding: 3px 0 3px 26px; position: relative; }
+	ul.check li::before { content: ""; position: absolute; left: 2px; top: 6px; width: 14px; height: 14px; border: 1.5px solid var(--ink); border-radius: 2px; background: #fff; }
+	.fill { display: inline-block; min-width: 130px; border-bottom: 1px solid var(--ink); height: 1em; vertical-align: baseline; }
+	.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+	svg { width: 100%; height: auto; display: block; background: #fff; border: 1px solid var(--line); }
+	svg text { font: 12px -apple-system, "Helvetica Neue", Arial, sans-serif; fill: var(--ink); }
+	svg .t { font-weight: 600; font-size: 13px; }
+	svg .s { fill: var(--dim); font-size: 11px; }
+	svg .box { fill: #f6f4fb; stroke: var(--ink); stroke-width: 1.2; }
+	svg .open { fill: #fff8e1; stroke: #a36b00; stroke-width: 1.2; stroke-dasharray: 5 4; }
+	.src { color: var(--dim); font-size: 12.5px; }
+	@media (max-width: 720px) { .cols { grid-template-columns: 1fr; } }
+	@media print {
+		body { background: #fff; font-size: 11.5pt; }
+		main { max-width: none; padding: 0; }
+		h2 { break-after: avoid; }
+		.sheet { break-before: page; }
+		table, ul.check li, .warn, .ok { break-inside: avoid; }
+		.noprint { display: none; }
+	}
+</style>
+</head>
+<body>
+<main>
+
+<h1>roach-cnc — survey packet 1</h1>
+<p class="sub">AXYZ 4012 → LinuxCNC over EtherCAT · written 2026-11-12 for the weekend of Nov 14–15 · for Felix and Tyler at the machine, Nathan at the desk</p>
+
+<div class="warn">
+	<strong>Stop unplugging.</strong> AXYZ published nothing, so the machine's own wiring is the only manual there is. Every wire pulled before it is photographed and labeled is a page torn out. If gutting has started: stop where it is, and survey what is still connected first.
+</div>
+
+<h2>1 · Where we are going</h2>
+<p>The target system as the telling draws it. Dashed yellow boxes are open choices the survey settles.</p>
+
+<svg viewBox="0 0 1000 560" role="img" aria-label="Target system block diagram">
+	<defs>
+		<marker id="a-ecat" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1f6fb2"/></marker>
+		<marker id="a-mains" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b3261e"/></marker>
+		<marker id="a-sig" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker>
+		<marker id="a-air" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#00838f"/></marker>
+	</defs>
+
+	<!-- row 1: control -->
+	<rect class="box" x="20" y="24" width="170" height="70" rx="6"/>
+	<text class="t" x="105" y="52" text-anchor="middle">LinuxCNC PC</text>
+	<text class="s" x="105" y="70" text-anchor="middle">real-time kernel · EtherCAT master</text>
+	<text class="s" x="105" y="84" text-anchor="middle">one wired port is the bus</text>
+
+	<g>
+		<rect class="box" x="250" y="24" width="120" height="70" rx="6"/><text class="t" x="310" y="52" text-anchor="middle">CS3E · X1</text><text class="s" x="310" y="70" text-anchor="middle">gantry, side 1</text>
+		<rect class="box" x="400" y="24" width="120" height="70" rx="6"/><text class="t" x="460" y="52" text-anchor="middle">CS3E · X2</text><text class="s" x="460" y="70" text-anchor="middle">gantry, side 2</text>
+		<rect class="box" x="550" y="24" width="120" height="70" rx="6"/><text class="t" x="610" y="52" text-anchor="middle">CS3E · Y</text><text class="s" x="610" y="70" text-anchor="middle">across the gantry</text>
+		<rect class="box" x="700" y="24" width="120" height="70" rx="6"/><text class="t" x="760" y="52" text-anchor="middle">CS3E · Z</text><text class="s" x="760" y="70" text-anchor="middle">brake output here</text>
+		<rect class="open" x="850" y="24" width="130" height="70" rx="6"/><text class="t" x="915" y="52" text-anchor="middle">More I/O?</text><text class="s" x="915" y="70" text-anchor="middle">EtherCAT coupler,</text><text class="s" x="915" y="84" text-anchor="middle">only if the count says so</text>
+	</g>
+	<g stroke="#1f6fb2" stroke-width="2.5" fill="none" marker-end="url(#a-ecat)">
+		<line x1="190" y1="59" x2="248" y2="59"/><line x1="370" y1="59" x2="398" y2="59"/><line x1="520" y1="59" x2="548" y2="59"/><line x1="670" y1="59" x2="698" y2="59"/>
+		<line x1="820" y1="59" x2="848" y2="59" stroke-dasharray="5 4"/>
+	</g>
+
+	<!-- row 2: motors -->
+	<g>
+		<rect class="open" x="250" y="140" width="120" height="50" rx="6"/><text class="t" x="310" y="162" text-anchor="middle">Motor X1</text><text class="s" x="310" y="178" text-anchor="middle">+ encoder</text>
+		<rect class="open" x="400" y="140" width="120" height="50" rx="6"/><text class="t" x="460" y="162" text-anchor="middle">Motor X2</text><text class="s" x="460" y="178" text-anchor="middle">+ encoder</text>
+		<rect class="open" x="550" y="140" width="120" height="50" rx="6"/><text class="t" x="610" y="162" text-anchor="middle">Motor Y</text><text class="s" x="610" y="178" text-anchor="middle">+ encoder</text>
+		<rect class="open" x="700" y="140" width="120" height="50" rx="6"/><text class="t" x="760" y="162" text-anchor="middle">Motor Z</text><text class="s" x="760" y="178" text-anchor="middle">+ encoder + brake</text>
+	</g>
+	<g stroke="#1c1b22" stroke-width="1.5" fill="none">
+		<line x1="310" y1="94" x2="310" y2="140"/><line x1="460" y1="94" x2="460" y2="140"/><line x1="610" y1="94" x2="610" y2="140"/><line x1="760" y1="94" x2="760" y2="140"/>
+	</g>
+	<rect class="box" x="20" y="140" width="170" height="50" rx="6"/>
+	<text class="t" x="105" y="162" text-anchor="middle">Limit + home switches</text>
+	<text class="s" x="105" y="178" text-anchor="middle">wired to each drive's inputs</text>
+	<path d="M190,165 L225,165 L225,80 L248,80" stroke="#2e7d32" stroke-width="1.8" fill="none" marker-end="url(#a-sig)"/>
+
+	<!-- row 3: power -->
+	<rect class="open" x="20" y="262" width="150" height="62" rx="6"/><text class="t" x="95" y="288" text-anchor="middle">Shop power</text><text class="s" x="95" y="306" text-anchor="middle">1-phase or 3-phase? volts?</text>
+	<rect class="box" x="210" y="262" width="150" height="62" rx="6"/><text class="t" x="285" y="288" text-anchor="middle">Disconnect + breakers</text><text class="s" x="285" y="306" text-anchor="middle">one branch per load</text>
+	<rect class="box" x="400" y="262" width="170" height="62" rx="6"/><text class="t" x="485" y="284" text-anchor="middle">E-stop chain</text><text class="s" x="485" y="300" text-anchor="middle">hard-wired: safety relay</text><text class="s" x="485" y="314" text-anchor="middle">drops drive + spindle power</text>
+	<rect class="open" x="610" y="262" width="150" height="62" rx="6"/><text class="t" x="685" y="288" text-anchor="middle">Drive DC supply</text><text class="s" x="685" y="306" text-anchor="middle">voltage set by drive model</text>
+	<rect class="box" x="800" y="262" width="180" height="62" rx="6"/><text class="t" x="890" y="288" text-anchor="middle">24 V DC</text><text class="s" x="890" y="306" text-anchor="middle">sensors · valves · relays</text>
+	<g stroke="#b3261e" stroke-width="2.2" fill="none" marker-end="url(#a-mains)">
+		<line x1="170" y1="293" x2="208" y2="293"/><line x1="360" y1="293" x2="398" y2="293"/><line x1="570" y1="293" x2="608" y2="293"/>
+		<path d="M685,262 L685,225 L460,225 L460,192" />
+		<path d="M485,324 L485,345 L285,345 L285,398"/>
+	</g>
+	<line x1="760" y1="293" x2="798" y2="293" stroke="#b3261e" stroke-width="2.2" stroke-dasharray="2 3"/>
+	<text class="s" x="572" y="218">DC bus to all four drives</text>
+
+	<!-- row 4: spindle + air -->
+	<rect class="open" x="210" y="400" width="150" height="70" rx="6"/><text class="t" x="285" y="426" text-anchor="middle">Spindle VFD</text><text class="s" x="285" y="444" text-anchor="middle">voltage class is open —</text><text class="s" x="285" y="458" text-anchor="middle">see §2 before buying</text>
+	<rect class="box" x="420" y="400" width="190" height="70" rx="6"/><text class="t" x="515" y="424" text-anchor="middle">HSD ES919 spindle</text><text class="s" x="515" y="440" text-anchor="middle">8 kW · 24,000 rpm · fan 230 V AC</text><text class="s" x="515" y="456" text-anchor="middle">air-released tool holder</text>
+	<rect class="box" x="680" y="400" width="300" height="70" rx="6"/><text class="t" x="830" y="424" text-anchor="middle">Air: filter → regulator → valves</text><text class="s" x="830" y="440" text-anchor="middle">tool release 6 bar · pressurize + cone clean 4 bar</text><text class="s" x="830" y="456" text-anchor="middle">valve coils on 24 V outputs</text>
+	<line x1="360" y1="435" x2="418" y2="435" stroke="#b3261e" stroke-width="2.2" marker-end="url(#a-mains)"/>
+	<line x1="680" y1="435" x2="612" y2="435" stroke="#00838f" stroke-width="2.2" marker-end="url(#a-air)"/>
+	<path d="M515,470 L515,500 L20,500" stroke="#2e7d32" stroke-width="1.8" fill="none"/>
+	<path d="M20,500 L8,500 L8,59 L18,59" stroke="#2e7d32" stroke-width="1.8" fill="none" marker-end="url(#a-sig)"/>
+	<text class="s" x="30" y="494">spindle tells the control: tool locked (S1) · collet open (S2) · overheated (thermal switch) — via drive or coupler inputs</text>
+	<path d="M105,94 L105,118 L205,118 L205,415 L208,415" stroke="#2e7d32" stroke-width="1.8" fill="none" stroke-dasharray="5 4" marker-end="url(#a-sig)"/>
+	<text class="s" x="112" y="132">run + speed to VFD</text>
+
+	<!-- legend -->
+	<g transform="translate(20,528)">
+		<line x1="0" y1="6" x2="30" y2="6" stroke="#1f6fb2" stroke-width="2.5"/><text x="36" y="10">EtherCAT</text>
+		<line x1="120" y1="6" x2="150" y2="6" stroke="#b3261e" stroke-width="2.2"/><text x="156" y="10">power</text>
+		<line x1="220" y1="6" x2="250" y2="6" stroke="#2e7d32" stroke-width="1.8"/><text x="256" y="10">24 V signals</text>
+		<line x1="350" y1="6" x2="380" y2="6" stroke="#00838f" stroke-width="2.2"/><text x="386" y="10">compressed air</text>
+		<rect class="open" x="500" y="-3" width="26" height="16" rx="3"/><text x="532" y="10">open until the survey answers it</text>
+	</g>
+</svg>
+
+<h2>2 · What the manuals already say</h2>
+
+<div class="warn">
+	<strong>Do not order the VEVOR 220 V VFD yet.</strong> The spindle ran on 380 V. A 220 V drive gets full power out of it only if the spindle has the optional re-strappable terminal board — and on single-phase input the drive must also be sized for it. Three survey answers decide it: the spindle nameplate, the terminal board, the shop supply (sheet B and C).
+</div>
+
+<p>The only 2-pole, 8 kW motor in the HSD manual is the ES919 card <strong>H1423H0224</strong> — almost certainly what "2P 8.00 kW H1…" on the plate is. Its two connections:</p>
+<table>
+	<tr><th></th><th>Star — how it ran on the old drive</th><th>Delta — what a 220 V drive needs</th></tr>
+	<tr><td>Voltage</td><td>380 V</td><td>220 V</td></tr>
+	<tr><td>Full voltage reached at</td><td colspan="2">200 Hz = 12,000 rpm; constant power from there to 400 Hz = 24,000 rpm</td></tr>
+	<tr><td>Power, continuous / S6 60%</td><td colspan="2">6.6 kW / 8 kW</td></tr>
+	<tr><td>Current, continuous / S6 60%</td><td>15.8 A / 18 A</td><td><strong>27.4 A / 31.2 A</strong></td></tr>
+</table>
+<ul>
+	<li><strong>The old Commander SE33400750</strong> is a 380–480 V three-phase, 7.5 kW, 16.5 A drive — a match for the star column. So the machine lived on three-phase 380–480 V.</li>
+	<li><strong>Star left as is on a 220 V drive</strong> → full torque only up to about 6,900 rpm, roughly 3.8 kW instead of 6.6, and weaker the faster it spins (my arithmetic from the card: 220/380 × 200 Hz = 116 Hz).</li>
+	<li><strong>Delta on single-phase 240 V</strong> → the drive must deliver 31 A out and pull something like 60–70 A in (my estimate). Buyers of the 11 kW VEVOR report about half power on single-phase, and no manual for that exact unit turned up.</li>
+	<li><strong>The spindle's other needs</strong> — fan on 230 V AC whenever powered, even idle · sensors are PNP, normally open, 10–30 V · thermal switch normally closed, must stop the spindle · never spin unless S1 says "tool locked" · never release the tool while turning.</li>
+</ul>
+<p class="src">Sources: refs/HSD Spindle Manual p.33 (card), p.80–81 (connectors), p.84 (terminal board), p.87–89 (inverter, fan), p.113–115 (sensors) · Commander SE ratings table and VEVOR buyer reports via web search, listed in the README's findings.</p>
+
+<div class="ok">
+	<strong>The drives check out on paper.</strong> CS3E is a <em>drive</em>, not a motor — each needs a 2-phase stepper, ideally Leadshine's matching CS-M motor with encoder. NEMA 34 motors pair with the <strong>CS3E-D1008</strong> (30–100 V DC, 8 A), not the D507 (20–50 V DC, 7 A). LinuxCNC has a Leadshine driver that lists the D1008; one forum user homed a NEMA 34 with it. Only the dual-axis 2CS3E-D507 is marked tested, which is why one drive gets proven on the bench before four get a cabinet.
+</div>
+
+<h2 class="sheet">3 · The survey sheet — print from here</h2>
+<p><strong>The rule:</strong> photo first, label second, unplug last. Wide shot, then close-up, then the nameplate square-on and readable. Number wires with tape flags on <em>both</em> sides of every connector before it comes apart. Write answers on this sheet; photos carry the rest.</p>
+
+<div class="cols">
+<div>
+	<h3>A · The state of things</h3>
+	<ul class="check">
+		<li>What has already been unplugged or removed? <span class="fill"></span></li>
+		<li>Does the machine still power up? yes / no / unknown</li>
+		<li>Wide photos: whole machine, each side, the cabinet door open, the gantry, the spindle carriage</li>
+		<li>Any AXYZ serial plate on the frame — photo</li>
+	</ul>
+
+	<h3>B · Shop power <span class="sub">(decides the VFD)</span></h3>
+	<ul class="check">
+		<li>Supply at the machine: single-phase / three-phase</li>
+		<li>Voltage, measured or from the panel: <span class="fill"></span> V</li>
+		<li>Breaker feeding it: <span class="fill"></span> A · spare panel capacity? <span class="fill"></span></li>
+		<li>Photo: the panel label, the breaker, the machine's old plug or disconnect</li>
+		<li>Compressor: pressure it holds <span class="fill"></span> psi · dryer or filter fitted? <span class="fill"></span></li>
+	</ul>
+
+	<h3>C · Spindle <span class="sub">(decides the VFD)</span></h3>
+	<ul class="check">
+		<li><strong>Nameplate, square-on, every character readable</strong> — model, code starting H1…, volts, hertz, amps, rpm</li>
+		<li>Open the small cover on the spindle's electrical box (two screws): is there a <strong>terminal board with movable links</strong>? Photo it as found</li>
+		<li>Tool holder plate: ISO 30 or HSK? <span class="fill"></span></li>
+		<li>Both connectors, mated and unmated; count the pins in use</li>
+		<li>Manual release button on the spindle? yes / no</li>
+		<li>Air lines into the spindle: how many <span class="fill"></span> · tube size <span class="fill"></span></li>
+		<li>Fan at the rear: present? spins freely?</li>
+		<li>Turn the shaft by hand: smooth / gritty / rumble</li>
+		<li>Tool holders and collets on hand: count <span class="fill"></span></li>
+	</ul>
+
+	<h3>D · Old VFD <span class="sub">(free answers, if it still lights up)</span></h3>
+	<ul class="check">
+		<li>Nameplate photo</li>
+		<li>If it powers: step through every keypad parameter and write number → value on the back of this sheet. Max speed, motor volts, motor amps and rated frequency are the spindle's settings as AXYZ commissioned it</li>
+		<li>Photo every control wire on its terminals before removal</li>
+		<li>Braking resistor fitted? Photo its label</li>
+	</ul>
+</div>
+<div>
+	<h3>E · Axis motors and drives <span class="sub">(decides the motor order)</span></h3>
+	<table>
+		<tr><th>Axis</th><th>Motor make / model</th><th>Amps</th><th>Wires</th><th>Encoder?</th></tr>
+		<tr><td>X1</td><td class="blank"></td><td></td><td></td><td></td></tr>
+		<tr><td>X2</td><td class="blank"></td><td></td><td></td><td></td></tr>
+		<tr><td>Y</td><td class="blank"></td><td></td><td></td><td></td></tr>
+		<tr><td>Z</td><td class="blank"></td><td></td><td></td><td></td></tr>
+	</table>
+	<ul class="check">
+		<li>One motor, measured: flange square <span class="fill"></span> mm (86 mm = NEMA 34) · shaft Ø <span class="fill"></span> mm · shaft length <span class="fill"></span> mm · body length <span class="fill"></span> mm · key or flat?</li>
+		<li>How each motor meets the machine — photo: pinion on the shaft, a belt, a gearbox? Any ratio marked? <span class="fill"></span></li>
+		<li>Pinion: tooth count <span class="fill"></span> · rack: measure across 10 teeth <span class="fill"></span> mm</li>
+		<li>Z: screw type and pitch if visible <span class="fill"></span> · does Z drop when unpowered? Is there a brake or counterweight?</li>
+		<li>Old amps: nameplate, DIP switches as set, supply voltage printed on them</li>
+		<li>Travel, tape-measured: X <span class="fill"></span> Y <span class="fill"></span> Z <span class="fill"></span></li>
+	</ul>
+
+	<h3>F · Switches and sensors</h3>
+	<ul class="check">
+		<li>Each limit / home switch: where, how many, photo of its label. Wires on it: 2 or 3? Marked NPN or PNP? Volts?</li>
+		<li>Tool-length puck or touch plate? Photo and wires</li>
+		<li>E-stop buttons: how many, where</li>
+		<li>Anything else with a wire: pendant, lights, vacuum, dust gate, pop-up pins, a tool rack</li>
+	</ul>
+
+	<h3>G · Air</h3>
+	<ul class="check">
+		<li>Every valve: photo the label — coil voltage is printed on it <span class="fill"></span> V</li>
+		<li>Regulator settings as found <span class="fill"></span> · filters fitted <span class="fill"></span> · pressure switch? <span class="fill"></span></li>
+		<li>Trace each tube: valve → where it lands</li>
+	</ul>
+
+	<h3>H · Cabinet</h3>
+	<ul class="check">
+		<li>Every board, both sides of every connector, all silkscreen labels</li>
+		<li>Transformers and power supplies: nameplates, output voltages</li>
+		<li>Contactors and relays: labels, coil voltage</li>
+		<li>Inside dimensions of the cabinet: W <span class="fill"></span> H <span class="fill"></span> D <span class="fill"></span> · backplate removable?</li>
+	</ul>
+
+	<h3>I · The iron <span class="sub">(the kill check)</span></h3>
+	<ul class="check">
+		<li>Push each axis by hand end to end: smooth / tight spots / grinding — X <span class="fill"></span> Y <span class="fill"></span> Z <span class="fill"></span></li>
+		<li>Racks and pinions: worn or chipped teeth? Rails and bearings: rust, play?</li>
+		<li>Grab the spindle nose and rock it: any play?</li>
+		<li>Gantry: push one side — does the other follow, or rack?</li>
+	</ul>
+</div>
+</div>
+
+<h2 class="sheet">4 · The weekends — a draft until the survey lands</h2>
+<table>
+	<tr><th>Weekend</th><th>At the machine</th><th>Between weekends — sessions and Nathan</th></tr>
+	<tr><td>1 · Nov 14–15</td><td><strong>Survey.</strong> This sheet, photos. Nothing more unplugged.</td><td>Survey read into the repo. Motor, drive, VFD and I/O choices drafted for Nathan. PC ordered.</td></tr>
+	<tr><td>2 · Nov 21–22</td><td>PC: install LinuxCNC, run the latency test. Fill survey gaps. Label and strip the cabinet.</td><td>Bench-kit order blessed by Nathan: one drive, one motor, one supply. One-axis config written.</td></tr>
+	<tr><td>3 · Dec 5–6</td><td><strong>One-axis rig</strong> on the bench: jog and home a motor from LinuxCNC.</td><td>Schematic and cabinet layout drafted from Nathan's diagram. Full order placed once the rig moves.</td></tr>
+	<tr><td>4–5 · Dec 12–20</td><td>Cabinet: backplate, power, E-stop chain, drives, wiring.</td><td>Four-axis config. Wire list checked against the build photos.</td></tr>
+	<tr><td>6 · Jan 9–10</td><td>Motors on the machine. Axis by axis: direction, scale, limits, homing, gantry squaring.</td><td>Config tuned from the numbers that come back.</td></tr>
+	<tr><td>7 · Jan 16–17</td><td>Spindle, VFD, air. Interlocks proven: no spin without a locked tool, no release while turning.</td><td>VFD parameter sheet. Interlock logic.</td></tr>
+	<tr><td>8 · Jan 23–24</td><td>First cuts. Measure a test part.</td><td>As-built drawings, final BoM.</td></tr>
+</table>
+<p class="sub">Thanksgiving and the year-end holidays are left empty. Parts lead time and survey surprises move everything after weekend 2.</p>
+
+<h2>5 · Three rulings, Felix</h2>
+<ol>
+	<li><strong>Hold the VFD order</strong> until sheet B and C are answered. <em>Recommended: yes.</em></li>
+	<li><strong>The PC Tyler buys now</strong>: a refurbished business desktop — Dell OptiPlex, HP EliteDesk or Lenovo ThinkCentre, 4 cores, 8 GB, SSD, with a wired Intel Ethernet port — plus any second network adapter for internet. Not a laptop. <em>Recommended: yes; about $150, and the latency test in weekend 2 is its gate.</em></li>
+	<li><strong>The repo</strong>: private on GitHub, Felix the one writer; Tyler and Nathan read it there and send photos and notes to Felix. <em>Recommended: yes — the manuals in it are not ours to publish.</em></li>
+</ol>
+<p class="sub">Behind the gate, each built on its recommendation meanwhile: v1 scope (manual tool release; automatic tool change later) · keep the old motors or buy matched closed-loop ones · D1008 vs D507 · where the extra I/O lives · what Nathan draws in. All in the README's forks table.</p>
+
+</main>
+</body>
+</html>
