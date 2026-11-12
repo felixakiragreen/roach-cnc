@@ -23,7 +23,7 @@
 	ul.check { list-style: none; padding: 0; margin: 4px 0; }
 	ul.check li { padding: 3px 0 3px 26px; position: relative; }
 	ul.check li::before { content: ""; position: absolute; left: 2px; top: 6px; width: 14px; height: 14px; border: 1.5px solid var(--ink); border-radius: 2px; background: #fff; }
-	.fill { display: inline-block; min-width: 130px; border-bottom: 1px solid var(--ink); height: 1em; vertical-align: baseline; }
+	.fill { display: inline-block; min-width: 90px; border-bottom: 1px solid var(--ink); height: 1em; vertical-align: baseline; }
 	.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
 	svg { width: 100%; height: auto; display: block; background: #fff; border: 1px solid var(--line); }
 	svg text { font: 12px -apple-system, "Helvetica Neue", Arial, sans-serif; fill: var(--ink); }
@@ -67,7 +67,7 @@
 	<!-- row 1: control -->
 	<rect class="box" x="20" y="24" width="170" height="70" rx="6"/>
 	<text class="t" x="105" y="52" text-anchor="middle">LinuxCNC PC</text>
-	<text class="s" x="105" y="70" text-anchor="middle">real-time kernel · EtherCAT master</text>
+	<text class="s" x="105" y="70" text-anchor="middle">real-time · EtherCAT master</text>
 	<text class="s" x="105" y="84" text-anchor="middle">one wired port is the bus</text>
 
 	<g>
@@ -102,14 +102,14 @@
 	<rect class="box" x="210" y="262" width="150" height="62" rx="6"/><text class="t" x="285" y="288" text-anchor="middle">Disconnect + breakers</text><text class="s" x="285" y="306" text-anchor="middle">one branch per load</text>
 	<rect class="box" x="400" y="262" width="170" height="62" rx="6"/><text class="t" x="485" y="284" text-anchor="middle">E-stop chain</text><text class="s" x="485" y="300" text-anchor="middle">hard-wired: safety relay</text><text class="s" x="485" y="314" text-anchor="middle">drops drive + spindle power</text>
 	<rect class="open" x="610" y="262" width="150" height="62" rx="6"/><text class="t" x="685" y="288" text-anchor="middle">Drive DC supply</text><text class="s" x="685" y="306" text-anchor="middle">voltage set by drive model</text>
-	<rect class="box" x="800" y="262" width="180" height="62" rx="6"/><text class="t" x="890" y="288" text-anchor="middle">24 V DC</text><text class="s" x="890" y="306" text-anchor="middle">sensors · valves · relays</text>
+	<rect class="box" x="800" y="262" width="180" height="62" rx="6"/><text class="t" x="890" y="288" text-anchor="middle">24 V DC</text><text class="s" x="890" y="306" text-anchor="middle">own supply · sensors, valves, relays</text>
 	<g stroke="#b3261e" stroke-width="2.2" fill="none" marker-end="url(#a-mains)">
 		<line x1="170" y1="293" x2="208" y2="293"/><line x1="360" y1="293" x2="398" y2="293"/><line x1="570" y1="293" x2="608" y2="293"/>
-		<path d="M685,262 L685,225 L460,225 L460,192" />
+		<path d="M685,262 L685,225 L835,225 L835,112 L280,112 L280,96"/>
+		<line x1="430" y1="112" x2="430" y2="96"/><line x1="580" y1="112" x2="580" y2="96"/><line x1="730" y1="112" x2="730" y2="96"/>
 		<path d="M485,324 L485,345 L285,345 L285,398"/>
 	</g>
-	<line x1="760" y1="293" x2="798" y2="293" stroke="#b3261e" stroke-width="2.2" stroke-dasharray="2 3"/>
-	<text class="s" x="572" y="218">DC bus to all four drives</text>
+	<text class="s" x="842" y="172">DC bus to</text><text class="s" x="842" y="186">all four drives</text>
 
 	<!-- row 4: spindle + air -->
 	<rect class="open" x="210" y="400" width="150" height="70" rx="6"/><text class="t" x="285" y="426" text-anchor="middle">Spindle VFD</text><text class="s" x="285" y="444" text-anchor="middle">voltage class is open —</text><text class="s" x="285" y="458" text-anchor="middle">see §2 before buying</text>
@@ -121,7 +121,7 @@
 	<path d="M20,500 L8,500 L8,59 L18,59" stroke="#2e7d32" stroke-width="1.8" fill="none" marker-end="url(#a-sig)"/>
 	<text class="s" x="30" y="494">spindle tells the control: tool locked (S1) · collet open (S2) · overheated (thermal switch) — via drive or coupler inputs</text>
 	<path d="M105,94 L105,118 L205,118 L205,415 L208,415" stroke="#2e7d32" stroke-width="1.8" fill="none" stroke-dasharray="5 4" marker-end="url(#a-sig)"/>
-	<text class="s" x="112" y="132">run + speed to VFD</text>
+	<text class="s" x="198" y="134" text-anchor="end">run + speed to VFD</text>
 
 	<!-- legend -->
 	<g transform="translate(20,528)">
