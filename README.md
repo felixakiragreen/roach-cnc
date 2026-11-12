@@ -56,6 +56,15 @@ A fact with no evidence yet reads `unrecorded`; the survey replaces it with a ph
 3. **Sunday night** — Felix drops the photos and the filled sheet into the repo; a session reads them into this README, the parts list and the drawings, and reconciles the board.
 4. **Weeknights** — sessions do the desk work the weekend exposed: check a part against its manual, draft the parts list and the wiring for Nathan, write the LinuxCNC configuration.
 
+- **Sunday night's summons** · once the photos and the sheet are in the repo:
+
+```
+You are an Explorer at fable-high.
+Enter by the door — read ~/code/agents/canon/GUILD.md,
+wear ~/code/agents/canon/mantles/explorer.md,
+then boot ~/code/roach-cnc and continue: read the survey's photos and sheet into the README, and rule what they settle.
+```
+
 - **What a session is good for here** · reading nameplates and wiring off photos · checking every part against its manual before money moves · the parts list with its reasons · system drawings and wire lists · the LinuxCNC, HAL and EtherCAT configuration · the VFD parameter sheet · each weekend's packet
 - **What it cannot do** · touch, measure or energize anything · stand in for Nathan on electrical safety
 
@@ -110,35 +119,52 @@ Thanksgiving and the year-end holidays are left empty. Parts lead time and surve
 
 ## Findings
 
-- **F1 · The spindle is wired for 380 V; a 220 V drive needs it re-strapped.**
-	- the only 2-pole 8 kW motor in the manual is ES919 card H1423H0224: star 380 V, 15.8 A continuous / 18 A at S6 60% · delta 220 V, 27.4 A / 31.2 A · both 6.6 kW / 8 kW, full voltage at 200 Hz (12,000 rpm), to 24,000 rpm at 400 Hz — `refs/HSD Spindle Manual ES929-ES919-ES915.pdf` p.33
-	- the Commander SE33400750 is 380–480 V three-phase, 7.5 kW, 16.5 A continuous — the star column's drive — [Commander SE product data](https://scigate.com.sg/images/stories/scigate/download/Control-Techniques/Commander-SE/Commander%20SE%20Product%20Data.pdf), read through a web search, not opened
-	- re-strapping to delta takes the configurable 220/380 V terminal board, which the manual calls optional — p.84, '4.6.3'; whether this spindle has it is `unrecorded`
-	- left in star on a 220 V drive, full flux holds only to 220/380 × 200 Hz = 116 Hz ≈ 6,900 rpm, about 3.8 kW at the card's 5.3 N·m — the Explorer's arithmetic, not a measurement
-	- on single-phase 240 V, delta at 8 kW draws an estimated 60–70 A at the input — the Explorer's estimate, for Nathan to check
-- **F2 · What the spindle asks of the control** — same manual:
-	- power connector: pins 4, 6, 8 the motor phases · 1 and 5 the thermal switch · 3 and 9 the fan · 2 and 7 earth — p.80
-	- signals connector, ISO version: pin 1 S2 collet open · pin 2 S1 tool holder present · pin 3 S3 shaft stopped, optional · pins 4 and 6 the sensors' 24 V and 0 V · pins 7 and 8 the manual release button — p.81
-	- sensors are PNP, normally open, 10–30 V DC — p.113 · the shaft may turn only while S1 is on — p.114 · the thermal switch is normally closed, 48 V DC and 1.6 A at most, and must stop the spindle — p.115
-	- the fan runs on 230 V AC, 45 W, and "must always be activated, even when the electrospindle is idle" — p.88–89
-	- air: tool release at 6 bar, pressurization and cone cleaning at 4 bar, 8×6 mm tube, dry filtered air — p.71–72
-	- the release button works only with the spindle stopped and the machine in manual mode — p.86
-- **F3 · CS3E is a drive, and the D1008 is the NEMA 34 one** — `refs/Leadshine CSE3.pdf` p.8 (the file name transposes the model: it is the CS3E manual, V1.5):
-	- CS3E-D507: 20–50 V DC, 1.0–7.0 A, matched to NEMA 17, 23, 24 · CS3E-D1008: 30–100 V DC or 20–80 V AC, 2.1–8.0 A, matched to NEMA 23, 24, 34
-	- modes: cyclic synchronous position, profile position, profile velocity, homing · cycle times 500 µs to 5 ms
-	- each drive: 7 digital inputs — home, both limits, two probes, two general — and 7 outputs, one a 500 mA brake output that drives a motor brake directly
-	- object 0x2024 selects open loop (0) or closed loop (2, the default)
-	- `refs/Leadshine Motion Studio Software.pdf` is the quick start for Leadshine's Windows tuning tool, Modbus over RS232 — the crew needs a Windows laptop within reach
-- **F4 · LinuxCNC drives the CS3E, with one model proven** — [linuxcnc-ethercat, the Leadshine stepper driver](https://linuxcnc-ethercat.github.io/linuxcnc-ethercat/leadshine_stepper.html):
-	- the driver lists CS3E-D503, CS3E-D507 and CS3E-D1008; "Only the 2CS3E-D507 has been tested at this point"; it needs the `cia402` HAL component beside it
-	- "Digital input controls aren't complete yet"; no HAL output pins are documented; input functions are set by `ethercat download` and a power cycle
-	- a user reports a D1008 with a NEMA 34 Leadshine motor "properly homed the motor", home switch on a Beckhoff input; another ran a D1008 to about 2,000 rpm at 48 V, home switch on the drive's own input — [LinuxCNC forum thread 47546](https://forum.linuxcnc.org/ethercat/47546-anyone-looking-at-cs3e-d1008-drivers-from-leadshine)
-	- the page dates its list "as of early 2024": the driver's source is the next thing to read before the bench kit is ordered
-- **F5 · The nearest relative on record is a 2007 AXYZ 4008** — [LinuxCNC forum thread 59100](https://www.forum.linuxcnc.org/30-cnc-machines/59100-axyz-4008-retrofit-original-steppers-drives-mesa-7i95t-linuxcnc):
-	- Vexta PK299-F4.5A 2-phase steppers on Pacific Scientific 6410 step-and-direction drives; rack and pinion on X and Y, a screw on Z; a connection board with a toroidal transformer giving 5, 12 and 18 V
-	- its E-stop was interpreted by the AXYZ electronics — so the new chain is designed, not inherited
-	- no frame sizes, ratios, switch types or supply voltage are in the thread: the 4012's are the survey's to find
-- **F6 · The VEVOR 11 kW unit is undocumented** — no manual for the exact model turned up in one search; buyers of related 11 kW units report about 5.5 kW on single-phase input. One search is not a hunt: a manual with a Modbus map and a single-phase rating would reopen it.
+### F1 · The spindle is wired for 380 V; a 220 V drive needs it re-strapped
+
+- the only 2-pole 8 kW motor in the manual is ES919 card H1423H0224: star 380 V, 15.8 A continuous / 18 A at S6 60% · delta 220 V, 27.4 A / 31.2 A · both 6.6 kW / 8 kW, full voltage at 200 Hz (12,000 rpm), to 24,000 rpm at 400 Hz — `refs/HSD Spindle Manual ES929-ES919-ES915.pdf` p.33
+- the Commander SE33400750 is 380–480 V three-phase, 7.5 kW, 16.5 A continuous — the star column's drive — [Commander SE product data](https://scigate.com.sg/images/stories/scigate/download/Control-Techniques/Commander-SE/Commander%20SE%20Product%20Data.pdf), read through a web search, not opened
+- re-strapping to delta takes the configurable 220/380 V terminal board, which the manual calls optional — p.84, '4.6.3'; whether this spindle has it is `unrecorded`
+- left in star on a 220 V drive, full flux holds only to 220/380 × 200 Hz = 116 Hz ≈ 6,900 rpm, about 3.8 kW at the card's 5.3 N·m — the Explorer's arithmetic, not a measurement
+- on single-phase 240 V, delta at 8 kW draws an estimated 60–70 A at the input — the Explorer's estimate, for Nathan to check
+
+### F2 · What the spindle asks of the control
+
+- **Source:** `refs/HSD Spindle Manual ES929-ES919-ES915.pdf`
+- power connector: pins 4, 6, 8 the motor phases · 1 and 5 the thermal switch · 3 and 9 the fan · 2 and 7 earth — p.80
+- signals connector, ISO version: pin 1 S2 collet open · pin 2 S1 tool holder present · pin 3 S3 shaft stopped, optional · pins 4 and 6 the sensors' 24 V and 0 V · pins 7 and 8 the manual release button — p.81
+- sensors are PNP, normally open, 10–30 V DC — p.113 · the shaft may turn only while S1 is on — p.114 · the thermal switch is normally closed, 48 V DC and 1.6 A at most, and must stop the spindle — p.115
+- the fan runs on 230 V AC, 45 W, and "must always be activated, even when the electrospindle is idle" — p.88–89
+- air: tool release at 6 bar, pressurization and cone cleaning at 4 bar, 8×6 mm tube, dry filtered air — p.71–72
+- the release button works only with the spindle stopped and the machine in manual mode — p.86
+
+### F3 · CS3E is a drive, and the D1008 is the NEMA 34 one
+
+- **Source:** `refs/Leadshine CSE3.pdf` p.8 — the file name transposes the model: it is the CS3E manual, V1.5
+- CS3E-D507: 20–50 V DC, 1.0–7.0 A, matched to NEMA 17, 23, 24 · CS3E-D1008: 30–100 V DC or 20–80 V AC, 2.1–8.0 A, matched to NEMA 23, 24, 34
+- modes: cyclic synchronous position, profile position, profile velocity, homing · cycle times 500 µs to 5 ms
+- each drive: 7 digital inputs — home, both limits, two probes, two general — and 7 outputs, one a 500 mA brake output that drives a motor brake directly
+- object 0x2024 selects open loop (0) or closed loop (2, the default)
+- `refs/Leadshine Motion Studio Software.pdf` is the quick start for Leadshine's Windows tuning tool, Modbus over RS232 — the crew needs a Windows laptop within reach
+
+### F4 · LinuxCNC drives the CS3E, with one model proven
+
+- **Source:** [linuxcnc-ethercat, the Leadshine stepper driver](https://linuxcnc-ethercat.github.io/linuxcnc-ethercat/leadshine_stepper.html)
+- the driver lists CS3E-D503, CS3E-D507 and CS3E-D1008; "Only the 2CS3E-D507 has been tested at this point"; it needs the `cia402` HAL component beside it
+- "Digital input controls aren't complete yet"; no HAL output pins are documented; input functions are set by `ethercat download` and a power cycle
+- a user reports a D1008 with a NEMA 34 Leadshine motor "properly homed the motor", home switch on a Beckhoff input; another ran a D1008 to about 2,000 rpm at 48 V, home switch on the drive's own input — [LinuxCNC forum thread 47546](https://forum.linuxcnc.org/ethercat/47546-anyone-looking-at-cs3e-d1008-drivers-from-leadshine)
+- the page dates its list "as of early 2024": the driver's source is the next thing to read before the bench kit is ordered
+
+### F5 · The nearest relative on record is a 2007 AXYZ 4008
+
+- **Source:** [LinuxCNC forum thread 59100](https://www.forum.linuxcnc.org/30-cnc-machines/59100-axyz-4008-retrofit-original-steppers-drives-mesa-7i95t-linuxcnc)
+- Vexta PK299-F4.5A 2-phase steppers on Pacific Scientific 6410 step-and-direction drives; rack and pinion on X and Y, a screw on Z; a connection board with a toroidal transformer giving 5, 12 and 18 V
+- its E-stop was interpreted by the AXYZ electronics — so the new chain is designed, not inherited
+- no frame sizes, ratios, switch types or supply voltage are in the thread: the 4012's are the survey's to find
+
+### F6 · The VEVOR 11 kW unit is undocumented
+
+- no manual for the exact model turned up in one web search; buyers of related 11 kW units report about 5.5 kW on single-phase input
+- one search is not a hunt: a manual with a Modbus map and a single-phase rating would reopen it
 
 ## Decisions
 
@@ -183,13 +209,7 @@ The Explorer's proposals ride the forks table until he rules; a founding re-mint
 - read the three manuals whole and four web sources; six findings filed above
 - F1 is the headline: the spindle is 380 V as wired, so the 220 V VFD waits on three survey answers
 - built [lab/packet.html](lab/packet.html): the target system drawn, the survey sheet, the draft plan
-- the session's name-stamp is `unrecorded` — the rig's stamp was not visible from inside
 - **Decided:** D1–D4, his telling recorded; forks 1 and 2 ruled by the Explorer
-- **Next:** Baton — ⬡ → bench: run the survey (001) with the printed packet, this weekend. Before it, three rulings — forks 3, 4, 5. Behind it, the next session:
+- **Next:** three rulings first — forks 3, 4, 5 — then the survey; behind it, Sunday night's summons under 'How the weekends run'.
 
-```
-You are an Explorer at fable-high.
-Enter by the door — read ~/code/agents/canon/GUILD.md,
-wear ~/code/agents/canon/mantles/explorer.md,
-then boot ~/code/roach-cnc and continue: read the survey's photos and sheet into the README, and rule what they settle.
-```
+Baton — ⬡ → bench: run the survey (001) with the printed packet, this weekend.
