@@ -40,13 +40,13 @@ A fact with no evidence yet reads `unrecorded`; the survey replaces it with a ph
 | Part | What we know | Evidence |
 |---|---|---|
 | Router | AXYZ 4012, 4000 series | Felix's telling; serial plate `unrecorded` |
-| Spindle | HSD ES919, 2-pole, 8 kW S6 — read from the plate as "ES 9184 2P 08 00 KW H1"; the only 2-pole 8 kW card in the manual is H1423H0224 | F1; nameplate photo `unrecorded` |
+| Spindle | HSD ES919, 2-pole, 8 kW S6 — read from the plate as "ES 9184 2P 08 00 KW H1"; the only 2-pole 8 kW card in the manual is H1423H0224. Re-strappable, 380 V star or 220 V delta | F1; Felix's telling for the re-strap; nameplate and terminal-board photos `unrecorded` |
 | Old VFD | Control Techniques Commander SE33400750 — 380–480 V three-phase, 7.5 kW, 16.5 A | F1 |
-| Axis motors | `unrecorded` — a 2007 AXYZ 4008 carried Vexta PK299-F4.5A steppers on Pacific Scientific 6410 drives | F5 |
+| Axis motors | NEMA 34, being replaced (fork 6); the old ones' make and the mounts' dimensions `unrecorded` — a 2007 AXYZ 4008 carried Vexta PK299-F4.5A steppers on Pacific Scientific 6410 drives | Felix's telling; F5 |
 | Mechanics | `unrecorded` — the 4008: rack and pinion on X and Y, a screw on Z | F5 |
 | Limit and home switches | `unrecorded` | — |
 | Pneumatics | A solenoid valve releases the tool; valve and coil voltage `unrecorded` | Felix's telling; F2 |
-| Shop power | `unrecorded` — the machine itself ran on three-phase 380–480 V | F1 |
+| Shop power | Single-phase 220 V for everything (D5); the breaker feeding the machine `unrecorded` — the machine itself ran on three-phase 380–480 V | Felix's telling; F1 |
 | Cabinet | Being gutted: stepper amps, connector board, power board, FPGA board; how far along `unrecorded` | Felix's telling |
 
 ## How the weekends run
@@ -72,7 +72,7 @@ then boot ~/code/roach-cnc and continue: read the survey's photos and sheet into
 
 | Weekend | At the machine | Between weekends |
 |---|---|---|
-| 1 · Nov 14–15 | **Survey**: the packet, photos; nothing more unplugged | Survey read into the repo; motor, drive, VFD and I/O choices drafted for Nathan; PC ordered |
+| 1 · Nov 14–15 | **Survey**: the packet, photos; nothing more unplugged | Survey read into the repo; motor model, supply, VFD size and I/O drafted for Nathan |
 | 2 · Nov 21–22 | PC: install LinuxCNC, latency test; survey gaps; label and strip the cabinet | Bench kit blessed by Nathan — one drive, one motor, one supply; one-axis configuration |
 | 3 · Dec 5–6 | **One-axis rig**: jog and home a motor from LinuxCNC | Schematic and cabinet layout from Nathan's diagram; full order once the rig moves |
 | 4–5 · Dec 12–20 | Cabinet: backplate, power, E-stop chain, drives, wiring | Four-axis configuration; wire list checked against build photos |
@@ -87,12 +87,12 @@ Thanksgiving and the year-end holidays are left empty. Parts lead time and surve
 | ID | Work | Depends on | Staffing | Status |
 |---|---|---|---|---|
 | 001 | **[Survey the machine](lab/packet.html)** — the printed packet filled at the machine, photos into `photos/`, before anything more is unplugged | — | ⬡-gate (bench · Felix and Tyler) | OPEN — laid 2026-11-12 |
-| 002 | **Buy the LinuxCNC PC** — to fork 4's recommendation | ⬡-gate: fork 4 ruled | ⬡-gate (Tyler) | OPEN — laid 2026-11-12 |
+| 002 | **Buy the LinuxCNC PC** — to fork 4's recommendation | ⬡-gate: fork 4 ruled | ⬡-gate (Tyler) | KILLED 2026-11-12 — fork 4 ruled: Tyler has old PCs; weekend 2's latency test picks one |
 
 **Deferred** — un-laid, each waiting on the survey:
 
-- the motion parts dig — drive model, motors, supplies, cables, Z brake (forks 6, 7)
-- the spindle power dig — VFD class and size, the parameter sheet, the input circuit (fork 3)
+- the motion parts dig — which CS-M motor per axis, the drive supply, cables, Z brake (forks 6, 7)
+- the spindle power dig — VFD size on single-phase, the parameter sheet, the input circuit (fork 3)
 - the I/O and safety dig — the I/O count, the E-stop chain, where the extra I/O lives (fork 8)
 - the one-axis rig — the bench kit order, the configuration, the bench gate
 - the schematic and the wire list (fork 9)
@@ -106,16 +106,16 @@ Thanksgiving and the year-end holidays are left empty. Parts lead time and surve
 |---|---|---|---|---|
 | 1 | What gets proven first | Explorer | **Ruled:** survey before any purchase; one axis on the bench before four in a cabinet | F1 — the VFD as planned does not match the spindle as wired; F4 — the single-axis CS3E is untested in LinuxCNC's driver |
 | 2 | Photos in git | Explorer | **Ruled:** resized to 2000 px on the long edge, filed as `photos/‹subsystem›/`; originals stay in the crew's shared album | a hundred phone photos is about 400 MB of history forever |
-| 3 | The spindle VFD | Felix (Nathan, Tyler) | **Recommended: hold the VEVOR order.** Decide on three survey answers — the nameplate, the terminal board, the shop supply. A deviation from the telling's "we think" | F1, F6 |
-| 4 | The PC | Felix (Tyler) | **Recommended:** a refurbished business desktop — OptiPlex, EliteDesk or ThinkCentre, 4 cores, 8 GB, SSD, a wired Intel Ethernet port — plus any second network adapter; not a laptop; about $150. The latency test is its gate | EtherCAT takes a wired port whole; real-time latency is a property of the board, measured, not read off a spec |
+| 3 | The spindle VFD's size | Felix (Nathan) | Voltage **ruled by Felix 2026-11-12**: delta, 220 V, single-phase (D5). Size open: **recommended** one size up — a 15 kW-class drive, or one rated in writing for single-phase input at 32 A out — if the feed allows 70 A; otherwise the 11 kW VEVOR capped near 5.5 kW, its manual in hand first. The breaker decides | F1, F6, F7 |
+| 4 | The PC | Felix (Tyler) | **Ruled by Felix 2026-11-12:** one of Tyler's old PCs. Prefer a desktop, 4 cores, a wired Ethernet port; the latency test is its gate | EtherCAT takes a wired port whole; real-time latency is a property of the board, measured, not read off a spec |
 | 5 | The repo | Felix (Tyler, Nathan) | **Recommended:** private on GitHub; Felix the one writer; Tyler and Nathan read it there and send photos and notes to Felix. This README serves the crew at the top and the sessions below | the manuals in `refs/` are not ours to publish |
-| 6 | The motors | Felix (Nathan) | **Recommended:** new Leadshine CS-M closed-loop motors where frame and shaft match the mounts; the old steppers can run open-loop on a CS3E as a fallback | F3 — CS3E is a drive, and its open-loop mode exists; F5; survey sheet E |
-| 7 | The drive model | Felix (Nathan) | **Recommended: CS3E-D1008** if the motors are NEMA 34 | F3, F4 |
+| 6 | The motors | Felix (Nathan) | **Ruled likely by Felix 2026-11-12, on Nathan's recommendation:** new NEMA 34 Leadshine closed-loop motors matched to the drives. Open: which model per axis, shaft and pilot against the mounts, a brake on Z | F3 — CS3E is a drive, and its open-loop mode exists; F5; survey sheet E |
+| 7 | The drive model | Felix (Nathan) | **Recommended: CS3E-D1008** — its condition, NEMA 34, is met by fork 6 | F3, F4 |
 | 8 | Where the extra I/O lives | Felix (Nathan) | **Recommended:** limits and homes on the drives' own inputs; count the rest after the survey; expect a small EtherCAT coupler for the spindle, air and E-stop signals | F4 — the driver's digital inputs "aren't complete yet", outputs unconfirmed |
 | 9 | What the wiring is drawn in | Felix (Nathan) | **Recommended:** a wire list — from, to, gauge, color, label — as the truth in the repo, drawings rendered from it; Nathan's own tool wins if he has one | a list is checkable against photos line by line |
 | 10 | v1 scope | Felix | **Recommended:** v1 cuts parts with the tool released by hand at the spindle's button, interlocked; automatic tool change, vacuum zoning and dust automation wait for v2 | each is its own wiring and logic; none is needed to cut |
 
-**At his gate now:** forks 3, 4, 5. **Queued behind it:** 10, 6, 7, 8, 9.
+**At his gate now:** fork 5. **Waiting on the survey, then Nathan:** 3, 6, 7. **Queued:** 10, 8, 9.
 
 ## Findings
 
@@ -166,12 +166,20 @@ Thanksgiving and the year-end holidays are left empty. Parts lead time and surve
 - no manual for the exact model turned up in one web search; buyers of related 11 kW units report about 5.5 kW on single-phase input
 - one search is not a hunt: a manual with a Modbus map and a single-phase rating would reopen it
 
+### F7 · Fed single-phase, the 11 kW VEVOR is under the spindle
+
+- delta wants 27.4 A continuous and 31.2 A at S6 60% — F1
+- a three-phase drive on single-phase input is commonly derated to about half its output current: 50 A → about 25 A — a rule of thumb, not this unit's data sheet; F6's buyer reports of about 5.5 kW agree with it
+- input current, estimated at 240 V with a rectifier power factor near 0.65: about 35–45 A at the 5.5 kW cap, 55–70 A at the full plate — the Explorer's arithmetic, for Nathan to check
+- VFD settings off the card: motor voltage 220 V, rated frequency 200 Hz, maximum 400 Hz, motor current 27.4 A — p.33, and p.87 for the rule
+
 ## Decisions
 
 - **D1** (2026-11-12, Felix): **The control is LinuxCNC over EtherCAT.** The AXYZ controller and its software are not revived.
 - **D2** (2026-11-12, Felix): **Four Leadshine CS3E axes.** X1 and X2 the gantry pair, Y, Z.
 - **D3** (2026-11-12, Felix): **The HSD spindle stays and its VFD is replaced.** Which VFD is fork 3.
 - **D4** (2026-11-12, Felix): **The cabinet is gutted.** Stepper amps, connector board, power board and FPGA board come out.
+- **D5** (2026-11-12, Felix): **Everything runs on single-phase 220 V.** The spindle is re-strapped from 380 V star to 220 V delta to allow it.
 
 The Explorer's proposals ride the forks table until he rules; a founding re-mints or drops them.
 
@@ -187,6 +195,7 @@ The Explorer's proposals ride the forks table until he rules; a founding re-mint
 - **Nathan reads before mains** · a drawing or parts list that carries mains voltage is a draft until he has read it.
 - **Evidence before money** · a part is ordered when the manual page or the photo that justifies it is cited beside it in the parts list.
 - **Files appear when needed** · `photos/` at the survey, the parts list at the first order, drawings and `linuxcnc/` when their first file exists. `lab/` holds what is built to die — packets, scratch.
+- **Pages** · a page in `lab/` is Felikai on screen — dark, tokens copied from `~/code/felix/src/felikai.css` and embedded so it opens from disk anywhere — and black and white in print (Felix, 2026-11-12).
 - **Commits** · straight to `master`, one line each.
 - **The red list** — a session stops for Felix's read yes before:
 	- ordering or spending anything
@@ -205,11 +214,11 @@ The Explorer's proposals ride the forks table until he rules; a founding re-mint
 
 ## Ledger
 
-**2026-11-12 · Explorer · fable-high (unrecorded)** — the ground laid: the bet, the survey packet, ten forks
+**2026-11-12 · Explorer · fable-high (unrecorded)** — the ground laid: the bet, the survey packet, ten forks, three ruled in the room
 - read the three manuals whole and four web sources; six findings filed above
-- F1 is the headline: the spindle is 380 V as wired, so the 220 V VFD waits on three survey answers
+- F1 and F7 are the headline: delta on single-phase is the plan (D5), and the 11 kW VEVOR is then under the spindle — the breaker size decides the VFD
 - built [lab/packet.html](lab/packet.html): the target system drawn, the survey sheet, the draft plan
-- **Decided:** D1–D4, his telling recorded; forks 1 and 2 ruled by the Explorer
-- **Next:** three rulings first — forks 3, 4, 5 — then the survey; behind it, Sunday night's summons under 'How the weekends run'.
+- **Decided:** D1–D5, his; forks 1 and 2 ruled by the Explorer; forks 4 and 6 by Felix, 3 in part; 002 killed
+- **Next:** one ruling first — fork 5, the repo — then the survey; behind it, Sunday night's summons under 'How the weekends run'.
 
 Baton — ⬡ → bench: run the survey (001) with the printed packet, this weekend.
