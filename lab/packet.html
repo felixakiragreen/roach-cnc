@@ -18,7 +18,7 @@
 		--ground: var(--grey-900); --pane: var(--grey-850); --raised: var(--grey-800); --edge: var(--grey-700); --line: var(--grey-650);
 		--text: var(--grey-200); --said: var(--grey-300); --quiet: var(--grey-500); --strong: var(--grey-100); --tone: var(--felix);
 		--c-ecat: var(--blue-400); --c-power: var(--red-400); --c-sig: var(--green-400); --c-air: var(--purple-400); --c-open: var(--yellow-400); --c-link: var(--grey-500);
-		--warn: var(--orange-400); --ok: var(--green-400);
+		--warn: var(--orange-400); --ok: var(--green-400); --field: var(--grey-800);
 		--row: 24px; --radius: 6px;
 	}
 	* { box-sizing: border-box; }
@@ -36,14 +36,27 @@
 	table { border-collapse: collapse; width: 100%; margin: calc(var(--row) / 3) 0; font-size: 14px; }
 	th, td { border: 1px solid var(--edge); padding: 5px 8px; text-align: left; vertical-align: top; }
 	th { background: var(--raised); color: var(--said); font: 600 12px/var(--row) var(--font-text); letter-spacing: 0.06em; }
-	td.blank { min-width: 150px; height: 30px; }
-	ul.check { list-style: none; padding: 0; margin: 4px 0; }
-	ul.check li { padding: 3px 0 3px 26px; position: relative; }
-	ul.check li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 14px; height: 14px; border: 1.5px solid var(--quiet); border-radius: 3px; }
-	.fill { display: inline-block; min-width: 90px; border-bottom: 1px solid var(--quiet); height: 1em; vertical-align: baseline; }
 	.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
 	.src { color: var(--quiet); font-size: 12.5px; }
 	li::marker { color: var(--quiet); }
+
+
+	/* the fillable sheet */
+	input[type=text], select, textarea { font: inherit; color: var(--strong); background: var(--field); border: 0; border-bottom: 1px solid var(--quiet); border-radius: 0; padding: 0 5px; margin: 0 2px; }
+	input[type=text] { min-width: 64px; max-width: 100%; field-sizing: content; }
+	select { height: var(--row); }
+	textarea { display: block; width: 100%; min-height: calc(var(--row) * 3); margin: 4px 0; padding: 4px 8px; border: 1px solid var(--edge); border-radius: var(--radius); resize: vertical; field-sizing: content; }
+	input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--tone); outline-offset: 1px; }
+	input[type=checkbox] { accent-color: var(--tone); width: 16px; height: 16px; margin: 4px 0 0; }
+	.item { display: grid; grid-template-columns: 26px 1fr; padding: 3px 0; }
+	.item.done > div { color: var(--quiet); }
+	.item.done strong { color: var(--said); }
+	.have { font-size: 12px; color: var(--tone); border: 1px solid color-mix(in oklab, var(--tone) 50%, transparent); border-radius: 4px; padding: 0 5px; margin-left: 4px; white-space: nowrap; }
+	.note-label { font-size: 12px; color: var(--quiet); margin-top: 6px; }
+	td input[type=text] { width: 100%; min-width: 0; margin: 0; border-bottom: 0; background: transparent; }
+	#status { position: sticky; top: 0; z-index: 2; margin: 0 -20px; padding: 4px 20px; background: var(--raised); border-bottom: 1px solid var(--edge); font-size: 13px; color: var(--said); display: flex; gap: 16px; justify-content: space-between; }
+	#status.bad { background: color-mix(in oklab, var(--red-400) 22%, var(--ground)); color: var(--strong); border-bottom-color: var(--red-400); }
+	#status code, p code { font-family: ui-monospace, 'SF Mono', monospace; font-size: 12.5px; color: var(--strong); }
 
 	svg { width: 100%; height: auto; display: block; background: var(--pane); border: 1px solid var(--edge); border-radius: var(--radius); }
 	svg text { font: 12px var(--font-text); fill: var(--text); }
@@ -60,14 +73,19 @@
 			color-scheme: light;
 			--ground: #fff; --pane: #fff; --raised: #eee; --edge: #999; --line: #000;
 			--text: #000; --said: #000; --quiet: #444; --strong: #000; --tone: #000;
-			--c-ecat: #000; --c-power: #000; --c-sig: #000; --c-air: #000; --c-open: #000; --c-link: #000; --warn: #000; --ok: #000;
+			--field: #fff; --c-ecat: #000; --c-power: #000; --c-sig: #000; --c-air: #000; --c-open: #000; --c-link: #000; --warn: #000; --ok: #000;
 		}
 		body { font-size: 11pt; line-height: 1.4; }
 		main { max-width: none; padding: 0; }
 		h2 { break-after: avoid; }
 		.sheet { break-before: page; }
-		table, ul.check li, .warn, .ok { break-inside: avoid; }
-		ul.check li::before, .fill { border-color: #000; }
+		table, .item, .warn, .ok { break-inside: avoid; }
+		#status { display: none; }
+		input[type=text], select, textarea { border-color: #000; color: #000; }
+		input[type=text] { min-width: 90px; }
+		input[type=checkbox] { accent-color: #000; }
+		.item.done > div, .item.done strong { color: #000; }
+		.have { color: #000; border-color: #000; }
 		/* no color on paper: the line's weight and dash carry its kind */
 		svg .open { fill: #fff; }
 		svg .l-ecat { stroke-width: 3.5; } svg .l-power { stroke-width: 2; } svg .l-sig { stroke-width: 0.9; } svg .l-air { stroke-width: 2; stroke-dasharray: 2 3; }
@@ -77,8 +95,10 @@
 <body>
 <main>
 
+<div id="status" class="bad"><span id="status-save">Loading…</span><span id="status-count"></span></div>
+
 <h1>roach-cnc — survey packet 1</h1>
-<p class="sub">AXYZ 4012 → LinuxCNC over EtherCAT · written 2026-11-12 for the weekend of Nov 14–15 · for Felix and Tyler at the machine, Nathan at the desk</p>
+<p class="sub">AXYZ 4012 → LinuxCNC over EtherCAT · for the weekend of Nov 14–15 · revised 2026-11-13 · Felix and Tyler at the machine, Nathan at the desk</p>
 
 <h2>1 · Where we are going</h2>
 <p>The target system as the telling draws it. Dashed yellow boxes are open choices the survey settles.</p>
@@ -122,7 +142,7 @@
 	<path d="M190,165 L225,165 L225,80 L248,80" class="l-sig" stroke-width="1.8" fill="none" marker-end="url(#arr)"/>
 
 	<!-- row 3: power -->
-	<rect class="open" x="20" y="262" width="150" height="62" rx="6"/><text class="t" x="95" y="288" text-anchor="middle">Shop power</text><text class="s" x="95" y="306" text-anchor="middle">1-phase 220 V · breaker?</text>
+	<rect class="open" x="20" y="262" width="150" height="62" rx="6"/><text class="t" x="95" y="288" text-anchor="middle">Shop power</text><text class="s" x="95" y="306" text-anchor="middle">1-phase 220 V · 100 A feed?</text>
 	<rect class="box" x="210" y="262" width="150" height="62" rx="6"/><text class="t" x="285" y="288" text-anchor="middle">Disconnect + breakers</text><text class="s" x="285" y="306" text-anchor="middle">one branch per load</text>
 	<rect class="box" x="400" y="262" width="170" height="62" rx="6"/><text class="t" x="485" y="284" text-anchor="middle">E-stop chain</text><text class="s" x="485" y="300" text-anchor="middle">hard-wired: safety relay</text><text class="s" x="485" y="314" text-anchor="middle">drops drive + spindle power</text>
 	<rect class="open" x="610" y="262" width="150" height="62" rx="6"/><text class="t" x="685" y="288" text-anchor="middle">Drive DC supply</text><text class="s" x="685" y="306" text-anchor="middle">voltage set by drive model</text>
@@ -136,7 +156,7 @@
 	<text class="s" x="842" y="172">DC bus to</text><text class="s" x="842" y="186">all four drives</text>
 
 	<!-- row 4: spindle + air -->
-	<rect class="open" x="210" y="400" width="150" height="70" rx="6"/><text class="t" x="285" y="426" text-anchor="middle">Spindle VFD</text><text class="s" x="285" y="444" text-anchor="middle">220 V · size open —</text><text class="s" x="285" y="458" text-anchor="middle">see §2 before buying</text>
+	<rect class="box" x="210" y="400" width="150" height="70" rx="6"/><text class="t" x="285" y="426" text-anchor="middle">Spindle VFD</text><text class="s" x="285" y="444" text-anchor="middle">VEVOR 15 kW · 45 A out</text><text class="s" x="285" y="458" text-anchor="middle">1-phase in, 400 Hz out</text>
 	<rect class="box" x="420" y="400" width="190" height="70" rx="6"/><text class="t" x="515" y="424" text-anchor="middle">HSD ES919 spindle</text><text class="s" x="515" y="440" text-anchor="middle">8 kW · 24,000 rpm · fan 230 V AC</text><text class="s" x="515" y="456" text-anchor="middle">air-released tool holder</text>
 	<rect class="box" x="680" y="400" width="300" height="70" rx="6"/><text class="t" x="830" y="424" text-anchor="middle">Air: filter → regulator → valves</text><text class="s" x="830" y="440" text-anchor="middle">tool release 6 bar · pressurize + cone clean 4 bar</text><text class="s" x="830" y="456" text-anchor="middle">valve coils on 24 V outputs</text>
 	<line x1="360" y1="435" x2="418" y2="435" class="l-power" stroke-width="2.2" marker-end="url(#arr)"/>
@@ -157,139 +177,42 @@
 	</g>
 </svg>
 
-<h2>2 · What the manuals already say</h2>
+<h2>2 · What the manuals and photos already say</h2>
 
-<div class="warn">
-	<strong>The VFD: the output side is fine, the input side is the question.</strong> In delta the spindle's full-load current is 27.4 A continuous, 31.2 A at peak duty — a 50 A drive covers that with room. But on single-phase the drive pulls all of that power through two input legs instead of three: about 45–55 A continuous, 55–70 A at peak. An 11 kW drive's front end is built for about 40–50 A a leg, and its capacitors for three-phase ripple. <strong>Full power needs one size up, and a 70–80 A feed (sheet B).</strong>
+<div class="ok">
+	<strong>The VFD Tyler bought checks out on paper.</strong> Its manual names it G300-015-045A-2SB: 15 kW, <strong>45 A out</strong>, single-phase 220–240 V in on terminals R and S. The spindle in delta wants 27.4 A continuous, 31.2 A at peak duty — covered with room. The 11 kW model is 30 A out, under that peak: one size up was the right call. The amps in VEVOR's listings (50 A, 68.5 A) are input current.
 </div>
-<table>
-	<tr><th>Drive</th><th>Feed</th><th>Spindle gets</th></tr>
-	<tr><td>11 kW, 50 A VEVOR</td><td>about 50 A</td><td>somewhere from 5.5 to 6.5 kW before it trips or sags — under the plate, no margin</td></tr>
-	<tr><td>15 kW class, or one rated in writing for single-phase input at 32 A out</td><td>70–80 A</td><td>the full 6.6 kW continuous, 8 kW peak</td></tr>
-</table>
-<p class="src">Input currents are my estimates from the manual's numbers; the drive figures are typical for the class, not this unit's data sheet. Nathan's to check.</p>
+<ul>
+	<li><strong>400 Hz is locked by default.</strong> Maximum frequency F0.07 stops at 300 Hz until F8.32 is set to 1. Set F8.32 first, then F0.07 = 400. Nathan's settings sheet already has this.</li>
+	<li><strong>The feed.</strong> Nathan's BoM fuses the drive at 100 A on #3 copper — 125% of its 68.5 A input rating. Whether Tyler's panel can give that circuit is sheet B's first line.</li>
+	<li><strong>The spindle is confirmed</strong> by your plate photo and the HSD data sheet: ES 919A 2P 08,00 kW, card H1423H0224, 24,000 rpm marked as its maximum.</li>
+	<li><strong>The axis motors are Vexta PK299-F4.5A</strong> steppers on Pacific Scientific 6410 drives — the same pairing as the 2007 AXYZ 4008 on the LinuxCNC forum.</li>
+</ul>
 
-<p>The only 2-pole, 8 kW motor in the HSD manual is the ES919 card <strong>H1423H0224</strong> — almost certainly what "2P 8.00 kW H1…" on the plate is; the nameplate photo confirms it. Its two connections:</p>
 <table>
-	<tr><th></th><th>Star — how it ran on the old drive</th><th>Delta — the plan</th></tr>
+	<tr><th>Spindle ES 919A</th><th>Star — how it ran on the old drive</th><th>Delta — the plan</th></tr>
 	<tr><td>Voltage</td><td>380 V</td><td>220 V</td></tr>
 	<tr><td>Full voltage reached at</td><td colspan="2">200 Hz = 12,000 rpm; constant power from there to 400 Hz = 24,000 rpm</td></tr>
 	<tr><td>Power, continuous / S6 60%</td><td colspan="2">6.6 kW / 8 kW</td></tr>
 	<tr><td>Full-load current, continuous / S6 60%</td><td>15.8 A / 18 A</td><td><strong>27.4 A / 31.2 A</strong></td></tr>
 </table>
+
+<h3>Four notes on Nathan's BoM</h3>
 <ul>
-	<li><strong>The old Commander SE33400750</strong> is a 380–480 V three-phase, 7.5 kW, 16.5 A drive — a match for the star column. So the machine lived on three-phase 380–480 V.</li>
-	<li><strong>It is in star today</strong> unless someone has moved the links: the re-strap is on p.84 of the manual. Photo the board before and after.</li>
-	<li><strong>Locked-rotor current</strong> is not listed; from the manual's equivalent circuit it works out near 140 A per leg at 220 V, 200 Hz (p.34). On a VFD it never flows: the drive ramps the frequency and holds current to its own limit.</li>
-	<li><strong>No manual for the exact VEVOR unit</strong> turned up in one search — worth getting before it is wired: it must reach 400 Hz, and it should take a braking resistor.</li>
-	<li><strong>VFD settings, from the card</strong> — motor voltage 220 V · rated frequency 200 Hz · maximum 400 Hz · motor current 27.4 A.</li>
-	<li><strong>The spindle's other needs</strong> — fan on 230 V AC whenever powered, even idle · sensors are PNP, normally open, 10–30 V · thermal switch normally closed, must stop the spindle · never spin unless S1 says "tool locked" · never release the tool while turning.</li>
+	<li><strong>Thermal switch → the control too.</strong> The BoM lands it on the drive's X4, which stops the spindle. HSD also wants the feed stopped, or the tool keeps pushing into the work. The drive's fault relay should reach a LinuxCNC input.</li>
+	<li><strong>The fan is small and always on.</strong> 230 V AC, 39 W at 60 Hz — about a quarter amp. A 1 A fuse covers it; it is fed from the line, never from the drive's output, and runs whenever the machine is powered.</li>
+	<li><strong>#8 motor cable against the spindle's connector.</strong> HSD's minimum for the phase pins is AWG 10. Check that #8 fits the connector's terminals before 50 ft of it is bought — sheet C asks for the old cable's size.</li>
+	<li><strong>The 100 Hz floor is 6,000 rpm.</strong> Fine for aluminum and wood; steel wants slower. Worth a line to HSD before the floor is set.</li>
 </ul>
-<p class="src">Sources: refs/HSD Spindle Manual p.33–35 (card, equivalent circuits), p.80–81 (connectors), p.84 (terminal board), p.87–89 (inverter, fan), p.113–115 (sensors) · Commander SE ratings table and VEVOR buyer reports via web search, listed in the README's findings.</p>
+<p class="src">Sources: refs/VEVOR VariableFrequencySpeedController.pdf Table 2-1, F0.07, F8.32, main-circuit terminals · refs/HSD Spindle Manual p.33–35, p.80, p.88–89, p.115 · refs/HSD Spindle Data Sheet · refs/photos IMG_4511, IMG_4512, IMG_4499 · refs/VFD_Spindle_Protection_BOM.xlsx.</p>
 
 <div class="ok">
-	<strong>The drives check out on paper.</strong> CS3E is a <em>drive</em>, not a motor — each needs a stepper. Ruled likely 2026-11-12, on Nathan's recommendation: new NEMA 34 Leadshine closed-loop motors, matched to the drives. NEMA 34 motors pair with the <strong>CS3E-D1008</strong> (30–100 V DC, 8 A), not the D507 (20–50 V DC, 7 A). LinuxCNC has a Leadshine driver that lists the D1008; one forum user homed a NEMA 34 with it. Only the dual-axis 2CS3E-D507 is marked tested, which is why one drive gets proven on the bench before four get a cabinet.
+	<strong>The drives check out on paper.</strong> CS3E is a <em>drive</em>; each needs a stepper. Ruled likely on Nathan's recommendation: new NEMA 34 Leadshine closed-loop motors. NEMA 34 pairs with the <strong>CS3E-D1008</strong> (30–100 V DC, 8 A), not the D507. LinuxCNC's Leadshine driver lists the D1008 and one forum user homed a NEMA 34 with it; only the dual-axis 2CS3E-D507 is marked tested, so one drive gets proven on the bench before four get a cabinet.
 </div>
 
-<h2 class="sheet">3 · The survey sheet — print from here</h2>
-<p><strong>The rule:</strong> photo first, label second, unplug last. Wide shot, then close-up, then the nameplate square-on and readable. Number wires with tape flags on <em>both</em> sides of every connector before it comes apart. Write answers on this sheet; photos carry the rest.</p>
-
-<div class="cols">
-<div>
-	<h3>A · The state of things</h3>
-	<ul class="check">
-		<li>Does the machine still power up? yes / no / unknown</li>
-		<li>Wide photos: whole machine, each side, the cabinet door open, the gantry, the spindle carriage</li>
-		<li>Any AXYZ serial plate on the frame — photo</li>
-	</ul>
-
-	<h3>B · Shop power <span class="sub">(decides the VFD's size)</span></h3>
-	<ul class="check">
-		<li><strong>The breaker that will feed the machine: <span class="fill"></span> A</strong> · can it grow to 70–80 A? <span class="fill"></span></li>
-		<li>Voltage, measured or from the panel: <span class="fill"></span> V</li>
-		<li>Wire run from panel to machine: gauge <span class="fill"></span> · length <span class="fill"></span></li>
-		<li>Photo: the panel label, the breaker, the machine's old plug or disconnect</li>
-		<li>Compressor: pressure it holds <span class="fill"></span> psi · dryer or filter fitted? <span class="fill"></span></li>
-	</ul>
-
-	<h3>C · Spindle</h3>
-	<ul class="check">
-		<li><strong>Nameplate, square-on, every character readable</strong> — model, code starting H1…, volts, hertz, amps, rpm</li>
-		<li>Open the small cover on the spindle's electrical box (two screws): photo the <strong>terminal board and its links as found</strong>, before any re-strap</li>
-		<li>Tool holder plate: ISO 30 or HSK? <span class="fill"></span></li>
-		<li>Both connectors, mated and unmated; count the pins in use</li>
-		<li>Manual release button on the spindle? yes / no</li>
-		<li>Air lines into the spindle: how many <span class="fill"></span> · tube size <span class="fill"></span></li>
-		<li>Fan at the rear: present? spins freely?</li>
-		<li>Turn the shaft by hand: smooth / gritty / rumble</li>
-		<li>Tool holders and collets on hand: count <span class="fill"></span></li>
-	</ul>
-
-	<h3>D · Old VFD <span class="sub">(free answers, if it still lights up)</span></h3>
-	<ul class="check">
-		<li>Nameplate photo</li>
-		<li>If it powers: step through every keypad parameter and write number → value on the back of this sheet. Max speed, motor volts, motor amps and rated frequency are the spindle's settings as AXYZ commissioned it</li>
-		<li>Photo every control wire on its terminals before removal</li>
-		<li>Braking resistor fitted? Photo its label</li>
-	</ul>
-</div>
-<div>
-	<h3>E · Axis motors and mounts <span class="sub">(the new motors must bolt on)</span></h3>
-	<table>
-		<tr><th>Axis</th><th>Motor make / model</th><th>Amps</th><th>Wires</th><th>Encoder?</th></tr>
-		<tr><td>X1</td><td class="blank"></td><td></td><td></td><td></td></tr>
-		<tr><td>X2</td><td class="blank"></td><td></td><td></td><td></td></tr>
-		<tr><td>Y</td><td class="blank"></td><td></td><td></td><td></td></tr>
-		<tr><td>Z</td><td class="blank"></td><td></td><td></td><td></td></tr>
-	</table>
-	<ul class="check">
-		<li><strong>One motor off its mount</strong>, measured: flange square <span class="fill"></span> mm (86 mm = NEMA 34) · shaft Ø <span class="fill"></span> mm · shaft length <span class="fill"></span> mm · body length <span class="fill"></span> mm · key or flat? · pilot boss Ø <span class="fill"></span> mm · bolt spacing <span class="fill"></span> mm</li>
-		<li>What sits on the shaft — pinion or pulley: bore Ø <span class="fill"></span> mm · how it is fixed: set screw / key / clamp</li>
-		<li>How each motor meets the machine — photo: pinion on the shaft, a belt, a gearbox? Any ratio marked? <span class="fill"></span></li>
-		<li>Pinion: tooth count <span class="fill"></span> · rack: measure across 10 teeth <span class="fill"></span> mm</li>
-		<li>Z: screw type and pitch if visible <span class="fill"></span> · does Z drop when unpowered? Is there a brake or counterweight?</li>
-		<li>Old amps: nameplate, DIP switches as set, supply voltage printed on them</li>
-		<li>Travel, tape-measured: X <span class="fill"></span> Y <span class="fill"></span> Z <span class="fill"></span></li>
-	</ul>
-
-	<h3>F · Switches and sensors</h3>
-	<ul class="check">
-		<li>Each limit / home switch: where, how many, photo of its label. Wires on it: 2 or 3? Marked NPN or PNP? Volts?</li>
-		<li>Tool-length puck or touch plate? Photo and wires</li>
-		<li>E-stop buttons: how many, where</li>
-		<li>Anything else with a wire: pendant, lights, vacuum, dust gate, pop-up pins, a tool rack</li>
-	</ul>
-
-	<h3>G · Air</h3>
-	<ul class="check">
-		<li>Every valve: photo the label — coil voltage is printed on it <span class="fill"></span> V</li>
-		<li>Regulator settings as found <span class="fill"></span> · filters fitted <span class="fill"></span> · pressure switch? <span class="fill"></span></li>
-		<li>Trace each tube: valve → where it lands</li>
-	</ul>
-
-	<h3>H · Cabinet</h3>
-	<ul class="check">
-		<li>Every board, both sides of every connector, all silkscreen labels</li>
-		<li>Transformers and power supplies: nameplates, output voltages</li>
-		<li>Contactors and relays: labels, coil voltage</li>
-		<li>Inside dimensions of the cabinet: W <span class="fill"></span> H <span class="fill"></span> D <span class="fill"></span> · backplate removable?</li>
-	</ul>
-
-	<h3>J · Tyler's PCs</h3>
-	<ul class="check">
-		<li>Each candidate: make and model <span class="fill"></span> · CPU <span class="fill"></span> · RAM <span class="fill"></span> · wired Ethernet port? · 64-bit?</li>
-		<li>Prefer a desktop with 4 cores and a wired port; weekend 2's latency test picks the winner</li>
-	</ul>
-
-	<h3>I · The iron <span class="sub">(the kill check)</span></h3>
-	<ul class="check">
-		<li>Push each axis by hand end to end: smooth / tight spots / grinding — X <span class="fill"></span> Y <span class="fill"></span> Z <span class="fill"></span></li>
-		<li>Racks and pinions: worn or chipped teeth? Rails and bearings: rust, play?</li>
-		<li>Grab the spindle nose and rock it: any play?</li>
-		<li>Gantry: push one side — does the other follow, or rack?</li>
-	</ul>
-</div>
-</div>
+<h2 class="sheet">3 · The survey sheet</h2>
+<p><strong>The rule:</strong> photo first, label second, unplug last. Wide shot, then close-up, then the nameplate square-on and readable. Tick a line when it is done; type what you measure. Answers save to <code>lab/survey.json</code> as you go. A green tag names a photo already in <code>refs/photos</code>.</p>
+<div class="cols" id="sheet"></div>
 
 <h2 class="sheet">4 · The weekends — a draft until the survey lands</h2>
 <table>
@@ -305,14 +228,197 @@
 <p class="sub">Thanksgiving and the year-end holidays are left empty. Parts lead time and survey surprises move everything after weekend 2.</p>
 
 <h2>5 · Rulings</h2>
-<p><strong>Ruled 2026-11-12:</strong> spindle in delta, everything on single-phase 220 V · the PC is one of Tyler's · motors are new NEMA 34 Leadshine closed-loop, likely, on Nathan's word.</p>
-<p><strong>Still open:</strong></p>
-<ol>
-	<li><strong>The VFD's size</strong> — Nathan's call: the 11 kW VEVOR, short of full power on single-phase, or one size up. <em>Recommended: one size up on a 70–80 A feed — full power is the requirement.</em></li>
-	<li><strong>The repo</strong>: private on GitHub, Felix the one writer; Tyler and Nathan read it there and send photos and notes to Felix. <em>Recommended: yes — the manuals in it are not ours to publish.</em></li>
-</ol>
-<p class="sub">Behind the gate, each built on its recommendation meanwhile: v1 scope (manual tool release; automatic tool change later) · which CS-M motor, and the D1008 to match · where the extra I/O lives · what Nathan draws in. All in the README's forks table.</p>
+<p><strong>Ruled:</strong> spindle in delta, everything on single-phase 220 V · the spindle reaches full power · the VFD is one size up, bought · the PC is one of Tyler's · motors are new NEMA 34 Leadshine closed-loop, likely · the repo is public, with Nathan and Jacob as collaborators.</p>
+<p><strong>Open, none urgent:</strong> v1 scope — tool released by hand at the spindle's button, automatic tool change later · which CS-M motor per axis, after sheet E · where the extra I/O lives and how LinuxCNC commands the VFD · what the wiring is drawn in. All in the README's forks table.</p>
 
 </main>
+
+<script>
+// The sheet as data. An item's text holds its fields: {name} is a text field, {name=a/b/c} a choice.
+// Every answer is keyed section.item[.field], and that key is what lands in survey.json.
+const SHEET = [
+	{ id: 'state', title: 'A · The state of things', items: [
+		{ k: 'powers_up', t: 'Does the machine still power up? {answer=yes/no/unknown}' },
+		{ k: 'wide_photos', t: 'Wide photos: whole machine, each side, the cabinet door open, the gantry, the spindle carriage', have: 'IMG_4373 · 4513 · 4514' },
+		{ k: 'serial_plate', t: 'AXYZ serial plate on the frame — photo · serial {serial}' },
+	] },
+	{ id: 'shop', title: 'B · Shop power', sub: 'sizes the feed', items: [
+		{ k: 'feed', t: '**The circuit that will feed the machine:** breaker today {amps} A · can the panel give a 2-pole 90–100 A circuit? {can_100=yes/no/unknown}' },
+		{ k: 'voltage', t: 'Measured at the panel: leg to leg {leg_leg} V · each leg to neutral {leg1_n} V and {leg2_n} V' },
+		{ k: 'panel', t: 'Panel label and breakers — photo · main breaker {main_amps} A · free spaces {free_spaces}' },
+		{ k: 'run', t: 'Wire run, panel to machine: {length} ft · wire there now {gauge}' },
+		{ k: 'compressor', t: 'Compressor: holds {psi} psi · dryer or filter fitted? {dryer}' },
+	] },
+	{ id: 'spindle', title: 'C · Spindle', items: [
+		{ k: 'nameplate', t: '**Nameplate, square-on, every character readable**', have: 'IMG_4510 · 4511' },
+		{ k: 'voltage_mark', t: 'On the plate\'s yellow RATED VOLTAGE box, which circle is punched? {mark=220 V/380 V/neither}' },
+		{ k: 'terminal_board', t: 'Open the small cover on the spindle\'s electrical box (two screws): photo the **terminal board and its links as found** · strapped as {found=star 380 V/delta 220 V/cannot tell}' },
+		{ k: 'holder', t: 'Tool holder plate reads {type=ISO 30/HSK F63/other}' },
+		{ k: 'connectors', t: 'Both connectors, mated and unmated — photos · power pins wired {power_pins} · signal pins wired {signal_pins}' },
+		{ k: 'cable', t: 'Spindle power cable: conductors {conductors} · size printed on the jacket {gauge} · shielded? {shielded=yes/no/cannot tell} · length {length} ft' },
+		{ k: 'button', t: 'Manual release button on the spindle: {present=yes/no}' },
+		{ k: 'air', t: 'Air lines into the spindle: how many {count} · tube outside Ø {tube} mm' },
+		{ k: 'fan', t: 'Rear fan: label photo · volts on the label {volts} · spins freely? {free=yes/no}' },
+		{ k: 'shaft', t: 'Turn the shaft by hand: {feel=smooth/gritty/rumble}' },
+		{ k: 'nose', t: 'Grab the spindle nose and rock it: {play=no play/some play}' },
+		{ k: 'holders', t: 'On hand: tool holders {holders} · collets {collets}' },
+	] },
+	{ id: 'vfd', title: 'D · VFDs, old and new', items: [
+		{ k: 'old_nameplate', t: 'Old Commander SE: nameplate photo' },
+		{ k: 'old_wires', t: 'Old drive: photo every control wire on its terminals' },
+		{ k: 'old_brake', t: 'Old drive: braking resistor fitted? {fitted=yes/no} · label photo · ohms {ohms} · watts {watts}' },
+		{ k: 'new_nameplate', t: 'New VEVOR, when it arrives: nameplate photo · model reads {model} · output {out_amps} A', note: 'expect G300-015-045A-2SB, 45 A' },
+		{ k: 'new_place', t: 'Where the new drive and its enclosure could go (drive is 201 × 344 × 219 mm): {where}' },
+	] },
+	{ id: 'axes', title: 'E · Axis motors and mounts', sub: 'the new motors must bolt on', table: {
+		k: 'motor', head: 'Axis', rows: ['X1', 'X2', 'Y', 'Z'], cols: [['model', 'Motor make / model'], ['amps', 'Amps'], ['wires', 'Wires'], ['encoder', 'Encoder?']],
+	}, items: [
+		{ k: 'known_motor', t: 'The Vexta PK299-F4.5A in the photo is on axis {axis} · all four the same? {same=yes/no}', have: 'IMG_4512' },
+		{ k: 'dims', t: '**One motor off its mount**, measured in mm: flange square {flange} · shaft Ø {shaft_d} · shaft length {shaft_l} · body length {body_l} · key or flat {key} · pilot boss Ø {pilot} · bolt spacing {bolts}' },
+		{ k: 'room', t: 'Room behind each motor for a longer body, mm: X1 {x1} · X2 {x2} · Y {y} · Z {z}' },
+		{ k: 'on_shaft', t: 'What sits on the shaft: {what=pinion/pulley/gearbox/coupling} · bore Ø {bore} mm · fixed by {fix=set screw/key/clamp/other}' },
+		{ k: 'reduction', t: 'Between motor and rack — photo · kind {kind} · ratio or tooth counts {ratio}' },
+		{ k: 'pinion', t: 'Pinion teeth {teeth} · rack, measured across 10 teeth {ten_teeth} mm' },
+		{ k: 'z', t: 'Z: screw kind and pitch {screw} · drops when unpowered? {drops=yes/no} · brake or counterweight {brake}' },
+		{ k: 'old_drives', t: 'Old drives: DIP switches as set — photo · supply voltage on the label {volts}', have: 'IMG_4499 · 4506' },
+		{ k: 'travel', t: 'Travel, tape-measured, with the unit: X {x} · Y {y} · Z {z}' },
+	] },
+	{ id: 'switches', title: 'F · Switches and sensors', items: [
+		{ k: 'limits', t: 'Each limit / home switch — photo of its label · where and how many: X {x} · Y {y} · Z {z}' },
+		{ k: 'kind', t: 'Wires per switch {wires=2/3/mixed} · marked {kind=NPN/PNP/mechanical/cannot tell} · volts {volts}' },
+		{ k: 'tool_sensor', t: 'Tool-length puck or touch plate: {present=yes/no} · photo and wires' },
+		{ k: 'estops', t: 'E-stop buttons: how many {count} · where {where}' },
+		{ k: 'other', t: 'Anything else with a wire — pendant, lights, vacuum, dust gate, pop-up pins, a tool rack: {list}' },
+	] },
+	{ id: 'air', title: 'G · Air', items: [
+		{ k: 'valves', t: 'Every valve: photo the label · how many {count} · coil voltage {coil_volts}' },
+		{ k: 'regulator', t: 'Regulator as found {setting} psi · filters fitted {filters} · pressure switch? {pressure_switch=yes/no}' },
+		{ k: 'trace', t: 'Trace each tube, valve to where it lands — write it in the notes' },
+	] },
+	{ id: 'cabinet', title: 'H · Cabinet', items: [
+		{ k: 'boards', t: 'Every board, both sides of every connector, all printed labels', have: 'IMG_4373 · 4499–4509 · 4515' },
+		{ k: 'supplies', t: 'Transformers and power supplies: nameplate photos · output voltages {outputs}' },
+		{ k: 'contactors', t: 'Contactors and relays: label photos · coil voltage {coil_volts}' },
+		{ k: 'size', t: 'Inside of the cabinet, with the unit: W {w} · H {h} · D {d} · backplate removable? {removable=yes/no}' },
+	] },
+	{ id: 'iron', title: 'I · The iron', sub: 'the kill check', items: [
+		{ k: 'push', t: 'Push each axis by hand, end to end: X {x=smooth/tight spots/grinding} · Y {y=smooth/tight spots/grinding} · Z {z=smooth/tight spots/grinding}' },
+		{ k: 'racks', t: 'Racks and pinions: worn or chipped teeth? {wear} · rails and bearings: rust, play? {rails}' },
+		{ k: 'gantry', t: 'Gantry: push one side — the other {follows=follows/lags/racks}' },
+	] },
+	{ id: 'pcs', title: 'J · Tyler\'s PCs', sub: 'weekend 2\'s latency test picks one', table: {
+		k: 'pc', head: 'PC', rows: ['1', '2', '3'], cols: [['model', 'Make / model'], ['cpu', 'CPU'], ['ram', 'RAM'], ['ethernet', 'Wired Ethernet?']],
+	}, items: [] },
+];
+
+const answers = {};
+let saveTimer = null;
+const statusBar = document.getElementById('status');
+const statusSave = document.getElementById('status-save');
+const statusCount = document.getElementById('status-count');
+
+const escapeHtml = text => text.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+function fieldHtml(key, choices) {
+	if (!choices) return `<input type="text" data-k="${key}" autocomplete="off">`;
+	const options = choices.split('/').map(choice => `<option>${escapeHtml(choice)}</option>`).join('');
+	return `<select data-k="${key}"><option value="">—</option>${options}</select>`;
+}
+
+function itemHtml(sectionId, item) {
+	const key = `${sectionId}.${item.k}`;
+	const text = escapeHtml(item.t)
+		.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+		.replace(/\{(\w+)(?:=([^}]+))?\}/g, (_, name, choices) => fieldHtml(`${key}.${name}`, choices));
+	const have = item.have ? ` <span class="have">have: ${escapeHtml(item.have)}</span>` : '';
+	const note = item.note ? ` <span class="sub">(${escapeHtml(item.note)})</span>` : '';
+	return `<div class="item"><input type="checkbox" data-k="${key}" aria-label="done"><div>${text}${note}${have}</div></div>`;
+}
+
+function tableHtml(sectionId, table) {
+	const head = `<tr><th>${table.head}</th>${table.cols.map(([, label]) => `<th>${label}</th>`).join('')}</tr>`;
+	const rows = table.rows.map(row => `<tr><td>${row}</td>${table.cols.map(([name]) => `<td><input type="text" data-k="${sectionId}.${table.k}.${row}.${name}" autocomplete="off"></td>`).join('')}</tr>`).join('');
+	return `<table>${head}${rows}</table>`;
+}
+
+function sectionHtml(section) {
+	const sub = section.sub ? ` <span class="sub">(${escapeHtml(section.sub)})</span>` : '';
+	const table = section.table ? tableHtml(section.id, section.table) : '';
+	const items = section.items.map(item => itemHtml(section.id, item)).join('');
+	return `<section><h3>${escapeHtml(section.title)}${sub}</h3>${table}${items}<div class="note-label">Notes</div><textarea data-k="${section.id}.notes"></textarea></section>`;
+}
+
+function renderSheet() {
+	const half = Math.ceil(SHEET.length / 2);
+	const column = sections => `<div>${sections.map(sectionHtml).join('')}</div>`;
+	document.getElementById('sheet').innerHTML = column(SHEET.slice(0, half)) + column(SHEET.slice(half));
+}
+
+const fields = () => [...document.querySelectorAll('[data-k]')];
+const fieldValue = field => (field.type === 'checkbox' ? field.checked : field.value);
+
+function showAnswers() {
+	for (const field of fields()) {
+		const answer = answers[field.dataset.k];
+		if (field.type === 'checkbox') field.checked = answer === true;
+		else field.value = typeof answer === 'string' ? answer : '';
+	}
+	showProgress();
+}
+
+function showProgress() {
+	const boxes = fields().filter(field => field.type === 'checkbox');
+	for (const box of boxes) box.closest('.item').classList.toggle('done', box.checked);
+	statusCount.textContent = `${boxes.filter(box => box.checked).length} of ${boxes.length} done`;
+}
+
+function showSave(text, bad) {
+	statusSave.innerHTML = text;
+	statusBar.classList.toggle('bad', bad);
+}
+
+// Only what was answered is kept, in sheet order, so survey.json diffs stay small.
+function collectAnswers() {
+	for (const key of Object.keys(answers)) delete answers[key];
+	for (const field of fields()) {
+		const value = fieldValue(field);
+		if (value !== '' && value !== false) answers[field.dataset.k] = value;
+	}
+}
+
+async function save() {
+	collectAnswers();
+	const response = await fetch('survey.json', { method: 'PUT', body: JSON.stringify({ answers }) }).catch(error => error);
+	if (response instanceof Error) return showSave(`NOT SAVED — the server is not answering. Restart it: <code>bun lab/serve.ts</code>`, true);
+	if (!response.ok) return showSave(`NOT SAVED — ${escapeHtml(await response.text())}`, true);
+	const { saved_at } = await response.json();
+	showSave(`Saved ${new Date(saved_at).toLocaleTimeString()} → lab/survey.json`, false);
+}
+
+function onEdit() {
+	showProgress();
+	showSave('Saving…', false);
+	clearTimeout(saveTimer);
+	saveTimer = setTimeout(save, 400);
+}
+
+async function start() {
+	renderSheet();
+	const response = location.protocol === 'file:' ? new Error('opened from disk') : await fetch('survey.json').catch(error => error);
+	if (response instanceof Error || !response.ok) {
+		// No server, no saving: the fields lock so nothing typed can be lost silently.
+		for (const field of fields()) field.disabled = true;
+		showProgress();
+		return showSave('Read-only — to fill this in, run <code>bun lab/serve.ts</code> in the repo and open <code>http://localhost:4012</code>', true);
+	}
+	const saved = await response.json();
+	Object.assign(answers, saved.answers);
+	showAnswers();
+	showSave(saved.saved_at ? `Loaded — last saved ${new Date(saved.saved_at).toLocaleString()}` : 'Ready — answers save as you type', false);
+	document.getElementById('sheet').addEventListener('input', onEdit);
+}
+
+start();
+</script>
 </body>
 </html>
