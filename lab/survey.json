@@ -1,6 +1,10 @@
 {
-	"saved_at": "2026-11-13T14:13:01.036Z",
+	"saved_at": "2026-11-13T14:20:38.023Z",
 	"answers": {
-		"spindle.nameplate": true
+		"state.powers_up": true,
+		"state.powers_up.answer": "unknown",
+		"state.wide_photos": true,
+		"spindle.nameplate": true,
+		"cabinet.boards": true
 	}
 }
